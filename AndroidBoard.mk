@@ -20,9 +20,9 @@ endif
 #----------------------------------------------------------------------
 ifeq ($(KERNEL_DEFCONFIG),)
     ifeq ($(TARGET_BUILD_VARIANT),user)
-      KERNEL_DEFCONFIG := msm-perf_defconfig
+      KERNEL_DEFCONFIG := zc550kl-custom_defconfig
     else
-      KERNEL_DEFCONFIG := msm_defconfig
+      KERNEL_DEFCONFIG := zc550kl-custom_defconfig
     endif
 endif
 
@@ -95,6 +95,30 @@ LOCAL_MODULE_TAGS  := optional eng
 LOCAL_MODULE_CLASS := ETC
 LOCAL_SRC_FILES    := $(LOCAL_MODULE)
 LOCAL_MODULE_PATH  := $(TARGET_OUT_KEYLAYOUT)
+include $(BUILD_PREBUILT)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE       := init.asus.rc
+LOCAL_MODULE_TAGS  := optional eng
+LOCAL_MODULE_CLASS := ETC
+LOCAL_SRC_FILES    := rootdir/etc/init.asus.rc
+LOCAL_MODULE_PATH  := $(TARGET_ROOT_OUT)
+include $(BUILD_PREBUILT)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE       := cameratoolbxs
+LOCAL_MODULE_TAGS  := optional eng
+LOCAL_MODULE_CLASS := ETC
+LOCAL_SRC_FILES    := rootdir/bin/cameratoolbxs
+LOCAL_MODULE_PATH  := $(TARGET_ROOT_OUT)/bin
+include $(BUILD_PREBUILT)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE       := sp
+LOCAL_MODULE_TAGS  := optional eng
+LOCAL_MODULE_CLASS := ETC
+LOCAL_SRC_FILES    := rootdir/bin/sp
+LOCAL_MODULE_PATH  := $(TARGET_ROOT_OUT)/bin
 include $(BUILD_PREBUILT)
 
 ifeq ($(strip $(BOARD_HAS_QCOM_WLAN)),true)

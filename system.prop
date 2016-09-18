@@ -17,7 +17,8 @@ persist.radio.rat_on=combine
 ril.subscription.types=NV,RUIM
 DEVICE_PROVISIONED=1
 # Start in cdma mode
-ro.telephony.default_network=5
+#ro.telephony.default_network=5
+persist.radio.multisim.config=dsds
 
 debug.sf.hw=0
 debug.egl.hw=0
@@ -85,7 +86,7 @@ ro.qualcomm.cabl=2
 #
 # System props for telephony
 # System prop to turn on CdmaLTEPhone always
-telephony.lteOnCdmaDevice=1
+telephony.lteOnCdmaDevice=0
 
 #
 # System props for bluetooh
@@ -101,7 +102,7 @@ persist.fuse_sdcard=true
 #
 ro.qc.sdk.audio.ssr=false
 ##fluencetype can be "fluence" or "fluencepro" or "none"
-ro.qc.sdk.audio.fluencetype=none
+#ro.qc.sdk.audio.fluencetype=fluence
 persist.audio.fluence.voicecall=true
 persist.audio.fluence.voicerec=false
 persist.audio.fluence.speaker=true
@@ -176,3 +177,6 @@ ro.sys.fw.dex2oat_thread_count=4
 #min/max cpu in core control
 ro.core_ctl_min_cpu=2
 ro.core_ctl_max_cpu=4
+
+persist.radio.add_power_save=1
+persist.radio.dont_use_dsd=true

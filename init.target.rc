@@ -34,6 +34,9 @@ on early-init
     mkdir /system 0777 root root
     symlink /data/tombstones /tombstones
 
+    mkdir /Removable 0755 media_rw media_rw
+    mount tmpfs tmpfs /Removable mode=0755,gid=1000
+
 on post-fs
     export LD_PRELOAD libNimsWrap.so
 
@@ -56,6 +59,12 @@ on fs
     wait /dev/block/bootdevice/by-name/modem
     mount vfat /dev/block/bootdevice/by-name/modem /firmware ro context=u:object_r:firmware_file:s0,shortname=lower,uid=1000,gid=1000,dmask=227,fmask=337
     write /sys/kernel/boot_adsp/boot 1
+
+    #+++ ASUS_BSP : add for user unlock
+    wait /dev/block/mmcblk0p20
+    chown root system /dev/block/mmcblk0p20
+    chmod 660 /dev/block/mmcblk0p20
+    #--- ASUS_BSP : add for user unlock
 
 on post-fs-data
     mkdir /data/tombstones 0771 system system
@@ -92,18 +101,6 @@ on property:persist.usb.chgdisabled=1
 
 on property:persist.usb.chgdisabled=0
     write /sys/class/power_supply/battery/charging_enabled 1
-
-service qrngd /system/bin/qrngd -f
-   class main
-   user root
-   group root
-
-service qrngp /system/bin/qrngp -f
-   class main
-   user root
-   group root
-   oneshot
-   disabled
 
 on property:sys.boot_completed=1
    start qrngp
@@ -233,3 +230,16 @@ service per_mgr /system/bin/pm-service
     class core
     user system
     group system net_raw
+
+service instant_camera /system/etc/init.asus.keycamera.sh
+    user root
+    group root
+    disabled
+    oneshot
+    seclabel u:r:instant_camera:s0
+
+on property:persist.asus.instant_camera=0
+    start instant_camera
+
+on property:persist.asus.instant_camera=1
+    start instant_camera
