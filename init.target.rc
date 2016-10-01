@@ -37,8 +37,8 @@ on early-init
     mkdir /Removable 0755 media_rw media_rw
     mount tmpfs tmpfs /Removable mode=0755,gid=1000
 
-on post-fs
-    export LD_PRELOAD libNimsWrap.so
+#on post-fs
+#    export LD_PRELOAD libNimsWrap.so
 
 on fs
     wait /dev/block/bootdevice

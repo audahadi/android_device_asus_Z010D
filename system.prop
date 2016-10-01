@@ -180,3 +180,5 @@ ro.core_ctl_max_cpu=4
 
 persist.radio.add_power_save=1
 persist.radio.dont_use_dsd=true
+ro.build.csc.version=WW_ZC550KL-13.8.26.46-20160812
+ro.asus.persistent=/dev/block/platform/7824900.sdhci/by-name/persistent

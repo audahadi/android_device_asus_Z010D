@@ -44,6 +44,10 @@ PRODUCT_MODEL := ASUS_Z010D
 PRODUCT_MANUFACTURER := asus
 BUILD_PRODUCT := ZC550KL
 
+PRODUCT_BUILD_PROP_OVERRIDES += \
+    BUILD_FINGERPRINT="asus/WW_Phone/ASUS_Z010:6.0.1/MMB29P/13.8.26.46-20160812:user/release-keys" \
+    PRIVATE_BUILD_DESC="WW_Phone-user 6.0.1 MMB29P 13.8.26.46-20160812 release-keys"
+
 ifeq ($(strip $(TARGET_USES_QTIC)),true)
 # font rendering engine feature switch
 -include $(QCPATH)/common/config/rendering-engine.mk
@@ -106,6 +110,7 @@ PRODUCT_PACKAGES += \
     AntHalService \
     libantradio \
     antradio_app
+
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     persist.sys.usb.config=mtp \
     camera2.portability.force_api=1
@@ -115,6 +120,9 @@ ADDITIONAL_DEFAULT_PROPERTIES += \
     ro.debuggable=1 \
     ro.adb.secure=0 \
     ro.secure=0
+
+BOOTIMAGE_BUILD_PROPERTIES += \
+   ro.bootimage.build.fingerprint=asus/WW_Phone/ASUS_Z010:6.0.1/MMB29P/13.8.26.46-20160812:user/release-keys
 
 PRODUCT_PACKAGES += wcnss_service
 
