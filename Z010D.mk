@@ -112,7 +112,7 @@ PRODUCT_PACKAGES += \
     antradio_app
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mtp \
+    persist.sys.usb.config=mtp,adb \
     camera2.portability.force_api=1
 
 # Development settings
@@ -121,8 +121,6 @@ ADDITIONAL_DEFAULT_PROPERTIES += \
     ro.adb.secure=0 \
     ro.secure=0
 
-BOOTIMAGE_BUILD_PROPERTIES += \
-   ro.bootimage.build.fingerprint=asus/WW_Phone/ASUS_Z010:6.0.1/MMB29P/13.8.26.46-20160812:user/release-keys
 
 PRODUCT_PACKAGES += wcnss_service
 

@@ -32,13 +32,11 @@ TARGET_KERNEL_HEADER_ARCH := arm64
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom msm_rtb.filter=0x237 ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci lpm_levels.sleep_disabled=1 earlyprintk androidboot.selinux=permissive
 TARGET_KERNEL_APPEND_DTB := true
-TARGET_BOOTIMG_SIGNED := true
 
 BOARD_KERNEL_BASE        := 0x80000000
-BOARD_KERNEL_OFFSET      := 0x00008000
 BOARD_KERNEL_PAGESIZE    := 2048
-BOARD_KERNEL_TAGS_OFFSET := 0x00000100
-BOARD_RAMDISK_OFFSET     := 0x01000000
+BOARD_KERNEL_TAGS_OFFSET := 0x01E00000
+BOARD_RAMDISK_OFFSET     := 0x02000000
 
 TARGET_USERIMAGES_USE_EXT4 := true
 BOARD_BOOTIMAGE_PARTITION_SIZE := 33554432
@@ -92,7 +90,8 @@ TARGET_BOARD_SUFFIX := _64
 TARGET_LDPRELOAD := libNimsWrap.so
 
 #Enable HW based full disk encryption
-TARGET_HW_DISK_ENCRYPTION := false
+TARGET_HW_DISK_ENCRYPTION := true
+TARGET_CRYPTFS_HW_PATH := device/qcom/common/cryptfs_hw
 
 #Enable SW based full disk encryption
 TARGET_SWV8_DISK_ENCRYPTION := true
