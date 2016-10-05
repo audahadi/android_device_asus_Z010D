@@ -5,6 +5,9 @@
 
 -include $(QCPATH)/common/msm8916/BoardConfigVendor.mk
 
+# Assert
+TARGET_OTA_ASSERT_DEVICE := Z010D,Z010,ASUS_Z010
+
 TARGET_BOARD_PLATFORM := msm8916
 TARGET_BOOTLOADER_BOARD_NAME := msm8916
 TARGET_NO_BOOTLOADER := true
@@ -81,8 +84,7 @@ BOARD_EGL_CFG := device/asus/Z010D/egl.cfg
 TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
 # Add NON-HLOS files for ota upgrade
 #ADD_RADIO_FILES := true
-TARGET_RECOVERY_UPDATER_LIBS += librecovery_updater_msm
-TARGET_INIT_VENDOR_LIB := libinit_msm
+TARGET_INIT_VENDOR_LIB := libinit_z010d
 
 #add suffix variable to uniquely identify the board
 TARGET_BOARD_SUFFIX := _64
