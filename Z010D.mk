@@ -85,21 +85,33 @@ PRODUCT_PACKAGES += \
 
 # Audio configuration file
 PRODUCT_COPY_FILES += \
-    device/qcom/msm8916_32/audio_policy.conf:system/etc/audio_policy.conf \
-    device/qcom/msm8916_32/audio_effects.conf:system/vendor/etc/audio_effects.conf \
-    device/qcom/msm8916_32/mixer_paths_mtp.xml:system/etc/mixer_paths_mtp.xml \
-    device/qcom/msm8916_32/mixer_paths_sbc.xml:system/etc/mixer_paths_sbc.xml \
-    device/qcom/msm8916_32/mixer_paths_qrd_skuh.xml:system/etc/mixer_paths_qrd_skuh.xml \
-    device/qcom/msm8916_32/mixer_paths_qrd_skui.xml:system/etc/mixer_paths_qrd_skui.xml \
-    device/qcom/msm8916_32/mixer_paths_qrd_skuhf.xml:system/etc/mixer_paths_qrd_skuhf.xml \
-    device/qcom/msm8916_32/mixer_paths_wcd9306.xml:system/etc/mixer_paths_wcd9306.xml \
-    device/qcom/msm8916_32/mixer_paths_skuk.xml:system/etc/mixer_paths_skuk.xml \
-    device/qcom/msm8916_32/mixer_paths_skul.xml:system/etc/mixer_paths_skul.xml \
-    device/qcom/msm8916_32/mixer_paths.xml:system/etc/mixer_paths.xml \
-    device/qcom/msm8916_32/sound_trigger_mixer_paths.xml:system/etc/sound_trigger_mixer_paths.xml \
-    device/qcom/msm8916_32/sound_trigger_mixer_paths_wcd9306.xml:system/etc/sound_trigger_mixer_paths_wcd9306.xml \
-    device/qcom/msm8916_32/sound_trigger_platform_info.xml:system/etc/sound_trigger_platform_info.xml \
-    device/asus/Z010D/aanc_tuning_mixer.txt:system/etc/aanc_tuning_mixer.txt
+    device/asus/Z010D/audio/aanc_tuning_mixer.txt:system/etc/aanc_tuning_mixer.txt \
+    device/asus/Z010D/audio/audio_effects.conf:system/etc/audio_effects.conf \
+    device/asus/Z010D/audio/audio_policy.conf:system/etc/audio_policy.conf \
+    device/asus/Z010D/audio/mixer_paths.xml:system/etc/mixer_paths.xml \
+    device/asus/Z010D/audio/mixer_paths_mtp.xml:system/etc/mixer_paths_mtp.xml \
+    device/asus/Z010D/audio/mixer_paths_mtp_EU.xml:system/etc/mixer_paths_mtp_EU.xml \
+    device/asus/Z010D/audio/mixer_paths_qrd_skuh.xml:system/etc/mixer_paths_qrd_skuh.xml \
+    device/asus/Z010D/audio/mixer_paths_qrd_skuhf.xml:system/etc/mixer_paths_qrd_skuhf.xml \
+    device/asus/Z010D/audio/mixer_paths_qrd_skui.xml:system/etc/mixer_paths_qrd_skui.xml \
+    device/asus/Z010D/audio/mixer_paths_sbc.xml:system/etc/mixer_paths_sbc.xml \
+    device/asus/Z010D/audio/mixer_paths_skuk.xml:system/etc/mixer_paths_skuk.xml \
+    device/asus/Z010D/audio/mixer_paths_skul.xml:system/etc/mixer_paths_skul.xml \
+    device/asus/Z010D/audio/mixer_paths_wcd9306.xml:system/etc/mixer_paths_wcd9306.xml \
+    device/asus/Z010D/audio/sound_trigger_mixer_paths.xml:system/etc/sound_trigger_mixer_paths.xml \
+    device/asus/Z010D/audio/sound_trigger_mixer_paths_wcd9306.xml:system/etc/sound_trigger_mixer_paths_wcd9306.xml \
+    device/asus/Z010D/audio/sound_trigger_platform_info.xml:system/etc/sound_trigger_platform_info.xml
+
+
+PRODUCT_COPY_FILES += \
+    device/asus/Z010D/audio/acdbdata/QRD/msm8939-snd-card-skul/QRD_SKUL_Speaker_cal.acdb:system/etc/acdbdata/QRD/msm8939-snd-card-skul/QRD_SKUL_Speaker_cal.acdb \
+    device/asus/Z010D/audio/acdbdata/QRD/QRD_Bluetooth_cal.acdb:system/etc/acdbdata/QRD/QRD_Bluetooth_cal.acdb \
+    device/asus/Z010D/audio/acdbdata/QRD/QRD_General_cal.acdb:system/etc/acdbdata/QRD/QRD_General_cal.acdb \
+    device/asus/Z010D/audio/acdbdata/QRD/QRD_Global_cal.acdb:system/etc/acdbdata/QRD/QRD_Global_cal.acdb \
+    device/asus/Z010D/audio/acdbdata/QRD/QRD_Handset_cal.acdb:system/etc/acdbdata/QRD/QRD_Handset_cal.acdb \
+    device/asus/Z010D/audio/acdbdata/QRD/QRD_Hdmi_cal.acdb:system/etc/acdbdata/QRD/QRD_Hdmi_cal.acdb \
+    device/asus/Z010D/audio/acdbdata/QRD/QRD_Headset_cal.acdb:system/etc/acdbdata/QRD/QRD_Headset_cal.acdb \
+    device/asus/Z010D/audio/acdbdata/QRD/QRD_Speaker_cal.acdb:system/etc/acdbdata/QRD/QRD_Speaker_cal.acdbc
 
 # MIDI feature
 PRODUCT_COPY_FILES += \
