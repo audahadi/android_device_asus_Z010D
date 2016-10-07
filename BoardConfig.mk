@@ -92,6 +92,12 @@ WIFI_DRIVER_FW_PATH_STA := "sta"
 WPA_SUPPLICANT_VERSION := VER_0_8_X
 #TARGET_USES_QCOM_WCNSS_QMI := true
 
+# Workaround framework bluetooth dependency
+BOARD_HAVE_BLUETOOTH := true
+BOARD_HAVE_BLUETOOTH_QCOM := true
+QCOM_BT_USE_SMD_TTY := true
+BLUETOOTH_HCI_USE_MCT := true
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/qcom/common
 
 # Added to indicate that protobuf-c is supported in this build
 PROTOBUF_SUPPORTED := false
