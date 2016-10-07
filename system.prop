@@ -178,7 +178,9 @@ ro.sys.fw.dex2oat_thread_count=4
 ro.core_ctl_min_cpu=2
 ro.core_ctl_max_cpu=4
 
+ro.sf.lcd_density=320
 persist.radio.add_power_save=1
 persist.radio.dont_use_dsd=true
 ro.build.csc.version=WW_ZC550KL-13.8.26.46-20160812
 ro.asus.persistent=/dev/block/platform/7824900.sdhci/by-name/persistent
+
