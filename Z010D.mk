@@ -223,4 +223,8 @@ PRODUCT_SYSTEM_VERITY_PARTITION := /dev/block/bootdevice/by-name/system
 PRODUCT_COPY_FILES += \
     device/asus/Z010D/sensors/hals.conf:system/etc/sensors/hals.conf
 
+# Bootanimation
+PRODUCT_COPY_FILES += \
+    device/asus/Z010D/bootanimation.zip:system/media/bootanimation.zip
+
 GMS_ENABLE_OPTIONAL_MODULES := false
