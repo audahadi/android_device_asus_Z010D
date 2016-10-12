@@ -5,7 +5,10 @@ TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
 DEVICE_PACKAGE_OVERLAYS := device/asus/Z010D/overlay
 
 # call the proprietary setup
-$(call inherit-product, vendor/asus/Z010D/Z010D-vendor.mk)
+$(call inherit-product-if-exists, vendor/asus/Z010D/Z010D-vendor.mk)
+#$(call inherit-product-if-exists, vendor/asus/msm8916-common/msm8916-common-vendor.mk)
+
+$(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
 
 # Ramdisk
 PRODUCT_PACKAGES += \
@@ -70,10 +73,7 @@ PRODUCT_BOOT_JARS += oem-services
 PRODUCT_BOOT_JARS += com.qti.location.sdk
 endif
 
-PRODUCT_BOOT_JARS += WfdCommon
-
-# default is nosdcard, S/W button enabled in resource
-PRODUCT_CHARACTERISTICS := nosdcard
+#PRODUCT_BOOT_JARS += WfdCommon
 
 #Android EGL implementation
 PRODUCT_PACKAGES += libGLES_android
@@ -141,14 +141,17 @@ PRODUCT_COPY_FILES += \
     device/asus/Z010D/msm_irqbalance.conf:system/vendor/etc/msm_irqbalance.conf
 
 #wlan driver
-PRODUCT_COPY_FILES += \
-    device/asus/Z010D/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini \
-    device/asus/Z010D/WCNSS_wlan_dictionary.dat:$(TARGET_OUT_ETC)/firmware/wlan/prima/WCNSS_wlan_dictionary.dat \
-    device/asus/Z010D/WCNSS_qcom_wlan_nv.bin:$(TARGET_OUT_ETC)/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
+#PRODUCT_COPY_FILES += \
+#    device/asus/Z010D/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini \
+#    device/asus/Z010D/WCNSS_wlan_dictionary.dat:$(TARGET_OUT_ETC)/firmware/wlan/prima/WCNSS_wlan_dictionary.dat \
+#    device/asus/Z010D/WCNSS_qcom_wlan_nv.bin:$(TARGET_OUT_ETC)/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
 
 PRODUCT_PACKAGES += \
     wpa_supplicant_overlay.conf \
-    p2p_supplicant_overlay.conf
+    p2p_supplicant_overlay.conf \
+    WCNSS_qcom_wlan_nv.bin \
+    WCNSS_cfg.dat \
+    WCNSS_qcom_cfg.ini
 
 ifeq ($(TARGET_USES_QCA_NFC),true)
 NFC_D := true
@@ -226,5 +229,8 @@ PRODUCT_COPY_FILES += \
 # Bootanimation
 PRODUCT_COPY_FILES += \
     device/asus/Z010D/bootanimation.zip:system/media/bootanimation.zip
+
+PRODUCT_COPY_FILES += \
+    device/asus/Z010D/btwifimac.sh:system/etc/btwifimac.sh
 
 GMS_ENABLE_OPTIONAL_MODULES := false

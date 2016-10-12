@@ -83,14 +83,15 @@ DOLBY_DAP := true
 # Wifi
 BOARD_HAS_QCOM_WLAN := true
 BOARD_WLAN_DEVICE := qcwcn
-BOARD_HOSTAPD_DRIVER := NL80211
-BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_qcwcn
-BOARD_WPA_SUPPLICANT_DRIVER := NL80211
-BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_qcwcn
-WIFI_DRIVER_FW_PATH_AP := "ap"
-WIFI_DRIVER_FW_PATH_STA := "sta"
 WPA_SUPPLICANT_VERSION := VER_0_8_X
-#TARGET_USES_QCOM_WCNSS_QMI := true
+BOARD_WPA_SUPPLICANT_DRIVER := NL80211
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
+BOARD_HOSTAPD_DRIVER := NL80211
+BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
+WIFI_DRIVER_MODULE_PATH := "/system/lib/modules/wlan.ko"
+WIFI_DRIVER_MODULE_NAME := "wlan"
+WIFI_DRIVER_FW_PATH_STA := "sta"
+WIFI_DRIVER_FW_PATH_AP := "ap"
 
 # Workaround framework bluetooth dependency
 BOARD_HAVE_BLUETOOTH := true
@@ -124,7 +125,7 @@ BOARD_EGL_CFG := device/asus/Z010D/egl.cfg
 TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
 # Add NON-HLOS files for ota upgrade
 #ADD_RADIO_FILES := true
-TARGET_INIT_VENDOR_LIB := libinit_z010d
+TARGET_INIT_VENDOR_LIB := libinit_msm
 
 #add suffix variable to uniquely identify the board
 TARGET_BOARD_SUFFIX := _64
@@ -141,6 +142,16 @@ TARGET_SWV8_DISK_ENCRYPTION := true
 TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
 
 MAX_VIRTUAL_DISPLAY_DIMENSION := 2048
+
+# Dex
+ifeq ($(HOST_OS),linux)
+  ifneq ($(TARGET_BUILD_VARIANT),eng)
+    ifeq ($(WITH_DEXPREOPT),)
+      WITH_DEXPREOPT := true
+    endif
+  endif
+endif
+WITH_DEXPREOPT_BOOT_IMG_ONLY ?= true
 
 # Enable sensor multi HAL
 USE_SENSOR_MULTI_HAL := true
