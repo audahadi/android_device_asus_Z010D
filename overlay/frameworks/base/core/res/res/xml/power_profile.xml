@@ -1,60 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (c) 2015, The Linux Foundation. All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are
+    met:
+        * Redistributions of source code must retain the above copyright
+          notice, this list of conditions and the following disclaimer.
+        * Redistributions in binary form must reproduce the above
+          copyright notice, this list of conditions and the following
+          disclaimer in the documentation and/or other materials provided
+          with the distribution.
+        * Neither the name of The Linux Foundation nor the names of its
+          contributors may be used to endorse or promote products derived
+          from this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
+    WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
+    ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+    BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+    BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+    WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+    OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+    IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
+-->
+
 <device name="Android">
-    <item name="none">0</item>
-    <item name="screen.on">91.63</item>
-    <item name="screen.full">109.7</item>
-    <item name="bluetooth.active">846.67</item>
-    <item name="bluetooth.on">0.6</item>
-    <item name="wifi.on">7.57</item>
-    <item name="wifi.active">227.11</item>
-    <item name="wifi.scan">107.3</item>
-    <item name="dsp.audio">35.43</item>
-    <item name="dsp.video">269.92</item>
-    <item name="radio.active">314</item>
-    <item name="radio.scanning">79.6</item>
-    <item name="gps.on">59.28</item>
-    <array name="radio.on">
-        <value>36.53</value>
-        <value>21.13</value>
-        <value>7.62</value>
-        <value>6.12</value>
-        <value>4.58</value>
-    </array>
-    <array name="cpu.speeds">
-        <value>200000</value>
-        <value>400000</value>
-        <value>533333</value>
-        <value>800000</value>
-        <value>998400</value>
-        <value>1094400</value>
-        <value>1152000</value>
-        <value>1209600</value>
-        <value>345600</value>
-        <value>960000</value>
-        <value>1113600</value>
-        <value>1363200</value>
-    </array>
-    <item name="cpu.idle">2.33</item>
-    <array name="cpu.active">
-        <value>51.25</value>
-        <value>74.39</value>
-        <value>95.71</value>
-        <value>129.54</value>
-        <value>163.55</value>
-        <value>185.14</value>
-        <value>191.84</value>
-        <value>233.88</value>
-        <value>241</value>
-        <value>299</value>
-        <value>302</value>
-        <value>255</value>
-    </array>
-    <item name="battery.capacity">3000</item>
-    <array name="wifi.batchedscan">
-        <value>.0002</value>
-        <value>.002</value>
-        <value>.02</value>
-        <value>.2</value>
-        <value>2</value>
-    </array>
+  <item name="screen.on">63</item>
+  <item name="screen.full">261</item>
+ <!-- Different CPU speeds as reported in
+       /sys/devices/system/cpu/cpu0/cpufreq/stats/time_in_state -->
+  <array name="cpu.speeds">
+      <value>200000</value> <!-- 200 MHz CPU speed -->
+      <value>400000</value> <!-- 400 MHz CPU speed -->
+      <value>533333</value> <!-- 533 MHz CPU speed -->
+      <value>800000</value> <!-- 800 MHz CPU speed -->
+      <value>998000</value> <!-- 998 MHz CPU speed -->
+      <value>1094400</value> <!-- 1094 MHz CPU speed -->
+      <value>1190400</value> <!-- 1190 MHz CPU speed -->
+  </array>
+  <!-- Current at each CPU speed, as per 'cpu.speeds' -->
+  <array name="cpu.active">
+      <value>151</value>
+      <value>169</value>
+      <value>177</value>
+      <value>195</value>
+      <value>259</value>
+      <value>307</value>
+      <value>353</value>
+  </array>
+  <!-- Current when CPU is awake -->
+  <item name="cpu.awake">1.6</item>
+  <!-- Current when CPU is idle -->
+  <item name="cpu.idle">1.6</item>
+  <!-- This is the battery capacity in mAh (measured at nominal voltage) -->
+  <item name="battery.capacity">2000</item>
 </device>
