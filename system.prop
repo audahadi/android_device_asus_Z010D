@@ -14,7 +14,7 @@ persist.rild.nitz_short_ons_1=
 persist.rild.nitz_short_ons_2=
 persist.rild.nitz_short_ons_3=
 persist.radio.rat_on=combine
-ril.subscription.types=NV,RUIM
+ril.subscription.types=RUIM,RUIM
 DEVICE_PROVISIONED=1
 # Start in cdma mode
 #ro.telephony.default_network=5
@@ -129,12 +129,6 @@ voice.voip.conc.disabled=true
 #property to enable image unload by audio HAL
 sys.audio.init=false
 
-#Set composition for USB
-persist.sys.usb.config=diag,serial_smd,rmnet_bam,adb
-
-#Set read only default composition for USB
-ro.sys.usb.default.config=diag,serial_smd,rmnet_bam,adb
-
 #property to enable user to access Google WFD settings
 persist.debug.wfd.enable=1
 #property to enable VDS WFD solution
@@ -178,6 +172,7 @@ ro.sys.fw.dex2oat_thread_count=4
 ro.core_ctl_min_cpu=2
 ro.core_ctl_max_cpu=4
 
+wifi.interface=wlan0
 ro.sf.lcd_density=320
 persist.radio.add_power_save=1
 persist.radio.dont_use_dsd=true

@@ -231,6 +231,7 @@ PRODUCT_COPY_FILES += \
     device/asus/Z010D/bootanimation.zip:system/media/bootanimation.zip
 
 PRODUCT_COPY_FILES += \
-    device/asus/Z010D/btwifimac.sh:system/etc/btwifimac.sh
+    device/asus/Z010D/btwifimac.sh:system/etc/btwifimac.sh \
+    device/asus/Z010D/rootdir/etc/sensor_init.sh:system/etc/sensor_init.sh
 
 GMS_ENABLE_OPTIONAL_MODULES := false
