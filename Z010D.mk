@@ -140,11 +140,8 @@ PRODUCT_PACKAGES += wcnss_service
 PRODUCT_COPY_FILES += \
     device/asus/Z010D/msm_irqbalance.conf:system/vendor/etc/msm_irqbalance.conf
 
-#wlan driver
-#PRODUCT_COPY_FILES += \
-#    device/asus/Z010D/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini \
-#    device/asus/Z010D/WCNSS_wlan_dictionary.dat:$(TARGET_OUT_ETC)/firmware/wlan/prima/WCNSS_wlan_dictionary.dat \
-#    device/asus/Z010D/WCNSS_qcom_wlan_nv.bin:$(TARGET_OUT_ETC)/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
+# Device init
+PRODUCT_PACKAGES += libinit_z010d
 
 PRODUCT_PACKAGES += \
     wpa_supplicant_overlay.conf \
