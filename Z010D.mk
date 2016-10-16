@@ -117,6 +117,10 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.midi.xml:system/etc/permissions/android.software.midi.xml
 
+# Keylayout
+PRODUCT_COPY_FILES += \
+    device/asus/Z010D/keylayout/focal-touchscreen.kl:system/usr/keylayout/focal-touchscreen.kl
+
 #ANT+ stack
 PRODUCT_PACKAGES += \
     AntHalService \
