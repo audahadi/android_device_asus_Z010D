@@ -17,7 +17,7 @@ PRODUCT_PACKAGES += \
     fs_config_files
 
 # Enable features in video HAL that can compile only on this platform
-TARGET_USES_MEDIA_EXTENSIONS := true
+# TARGET_USES_MEDIA_EXTENSIONS := true
 
 TARGET_USES_NQ_NFC := false
 
@@ -62,8 +62,6 @@ PRODUCT_COPY_FILES += \
     device/asus/Z010D/audio/acdbdata/MTP/MTP_Headset_cal.acdb:system/etc/acdbdata/MTP/MTP_Headset_cal.acdb \
     device/asus/Z010D/audio/acdbdata/MTP/MTP_Speaker_cal.acdb:system/etc/acdbdata/MTP/MTP_Speaker_cal.acdb
 
--include $(TOPDIR)hardware/qcom/audio/configs/msm8916_64/msm8916_64.mk
-
 # MIDI feature
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.midi.xml:system/etc/permissions/android.software.midi.xml
@@ -74,7 +72,8 @@ PRODUCT_COPY_FILES += \
     device/asus/Z010D/keylayout/focal-touchscreen.idc:system/usr/idc/focal-touchscreen.kl
 
 PRODUCT_PACKAGES += \
-    camera.msm8916
+    camera.msm8916 \
+		libshims_camera
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     camera2.portability.force_api=1
