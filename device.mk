@@ -80,3 +80,13 @@ PRODUCT_COPY_FILES += \
     device/asus/Z010D/keylayout/synaptics_dsx.kl:system/usr/keylayout/synaptics_dsx.kl \
     device/asus/Z010D/keylayout/synaptics_rmi4_i2c.kl:system/usr/keylayout/synaptics_rmi4_i2c.kl
 
+# Sensors
+PRODUCT_PACKAGES += \
+    calmodule.cfg \
+    libcalmodule_common \
+    sensors.msm8916
+
+# Properties
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.fusion.magfield.max=250
+
