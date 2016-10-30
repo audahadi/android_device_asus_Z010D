@@ -43,6 +43,7 @@ on post-fs
 on fs
     wait /dev/block/bootdevice
     mount_all fstab.qcom
+    write /proc/sys/vm/swappiness 100
 
     # Keeping following partitions outside fstab file. As user may not have
     # these partition flashed on the device. Failure to mount any partition in fstab file
@@ -89,11 +90,6 @@ service qcamerasvr /system/bin/mm-qcamera-daemon
 
 on init
    write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
-
-#enable zram
-on property:ro.config.zram=true
-    swapon_all fstab.qcom
-    write /proc/sys/vm/swappiness 100
 
 # Allow usb charging to be disabled peristently
 on property:persist.usb.chgdisabled=1
@@ -161,13 +157,13 @@ service imsqmidaemon /system/bin/imsqmidaemon
     class main
     user system
     socket ims_qmid stream 0660 system radio
-    group radio net_raw log qcom_diag
+    group radio log qcom_diag
 
 service imsdatadaemon /system/bin/imsdatadaemon
     class main
     user system
     socket ims_datad stream 0660 system radio
-    group system wifi radio inet net_raw log qcom_diag net_admin
+    group system wifi radio inet log qcom_diag
     disabled
 
 on property:sys.ims.QMI_DAEMON_STATUS=1
@@ -177,13 +173,13 @@ service ims_rtp_daemon /system/bin/ims_rtp_daemon
    class main
    user system
    socket ims_rtpd stream 0660 system radio
-   group radio net_raw diag qcom_diag log inet
+   group radio diag qcom_diag log inet
    disabled
 
 service imscmservice /system/bin/imscmservice
    class main
    user system
-   group radio net_raw diag qcom_diag log
+   group radio diag qcom_diag log
    disabled
 
 on property:sys.ims.DATA_DAEMON_STATUS=1

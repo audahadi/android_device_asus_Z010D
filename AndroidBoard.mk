@@ -20,9 +20,9 @@ endif
 #----------------------------------------------------------------------
 ifeq ($(KERNEL_DEFCONFIG),)
     ifeq ($(TARGET_BUILD_VARIANT),user)
-      KERNEL_DEFCONFIG := zc550kl-perf_defconfig
+      KERNEL_DEFCONFIG := zc550kl-custom_defconfig
     else
-      KERNEL_DEFCONFIG := zc550kl-perf_defconfig
+      KERNEL_DEFCONFIG := zc550kl-custom_defconfig
     endif
 endif
 

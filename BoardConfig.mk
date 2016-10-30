@@ -29,6 +29,9 @@ TARGET_2ND_CPU_VARIANT := cortex-a53
 BOOTLOADER_GCC_VERSION := arm-eabi-4.8
 BOOTLOADER_PLATFORM := msm8916 # use msm8952 LK configuration
 
+USE_CLANG_PLATFORM_BUILD := true
+TARGET_DISABLE_DASH := true
+
 TARGET_COMPILE_WITH_MSM_KERNEL := true
 TARGET_NO_KERNEL := false
 TARGET_KERNEL_ARCH := arm64
@@ -36,11 +39,14 @@ TARGET_KERNEL_HEADER_ARCH := arm64
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom msm_rtb.filter=0x237 ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci lpm_levels.sleep_disabled=1 earlyprintk androidboot.selinux=permissive
 TARGET_KERNEL_APPEND_DTB := true
+BOARD_SECCOMP_POLICY := device/qcom/$(TARGET_BOARD_PLATFORM)$(TARGET_BOARD_SUFFIX)/seccomp
 
 BOARD_KERNEL_BASE        := 0x80000000
 BOARD_KERNEL_PAGESIZE    := 2048
 BOARD_KERNEL_TAGS_OFFSET := 0x00000100
 BOARD_RAMDISK_OFFSET     := 0x01000000
+#MALLOC_IMPL := dlmalloc
+MALLOC_SVELTE := true
 
 TARGET_USERIMAGES_USE_EXT4 := true
 BOARD_BOOTIMAGE_PARTITION_SIZE := 33554432
@@ -53,8 +59,6 @@ BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_PERSISTIMAGE_PARTITION_SIZE := 33554432
 BOARD_PERSISTIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
-
-MALLOC_IMPL := dlmalloc
 
 # bring-up overrides
 USE_CAMERA_STUB := true
@@ -132,31 +136,19 @@ TARGET_LIBINIT_DEFINES_FILE := libinit_z010d
 #add suffix variable to uniquely identify the board
 TARGET_BOARD_SUFFIX := _64
 
-TARGET_LDPRELOAD := libNimsWrap.so
-
 #Enable HW based full disk encryption
 TARGET_HW_DISK_ENCRYPTION := true
 TARGET_CRYPTFS_HW_PATH := device/qcom/common/cryptfs_hw
 
 #Enable SW based full disk encryption
-TARGET_SWV8_DISK_ENCRYPTION := true
+#TARGET_SWV8_DISK_ENCRYPTION := true
 
 TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
 
 MAX_VIRTUAL_DISPLAY_DIMENSION := 2048
 
-# Dex
-ifeq ($(HOST_OS),linux)
-  ifneq ($(TARGET_BUILD_VARIANT),eng)
-    ifeq ($(WITH_DEXPREOPT),)
-      WITH_DEXPREOPT := true
-    endif
-  endif
-endif
-WITH_DEXPREOPT_BOOT_IMG_ONLY ?= true
-
 # Enable sensor multi HAL
-USE_SENSOR_MULTI_HAL := true
+#USE_SENSOR_MULTI_HAL := true
 
 FEATURE_QCRIL_UIM_SAP_SERVER_MODE := true
 
@@ -169,3 +161,11 @@ TARGET_PER_MGR_ENABLED := true
 # Tap-to-Wake
 TARGET_TAP_TO_WAKE_NODE := "/sys/bus/i2c/devices/i2c-5/5-0038/dclick_mode"
 
+WITH_DEXPREOPT := false
+ifneq ($(TARGET_BUILD_VARIANT),user)
+  # Retain classes.dex in APK's for non-user builds
+  DEX_PREOPT_DEFAULT := nostripping
+endif
+
+#enabling IMS for this target
+TARGET_USES_IMS := true

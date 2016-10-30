@@ -22,6 +22,13 @@ PRODUCT_AAPT_PREF_CONFIG := xhdpi
 #QTIC flag
 -include $(QCPATH)/common/config/qtic-config.mk
 
+#for android_filesystem_config.h
+PRODUCT_PACKAGES += \
+    fs_config_files
+
+# Enable features in video HAL that can compile only on this platform
+TARGET_USES_MEDIA_EXTENSIONS := true
+
 # media_profiles and media_codecs xmls for 8916
 ifeq ($(TARGET_ENABLE_QC_AV_ENHANCEMENTS), true)
 PRODUCT_COPY_FILES += device/qcom/msm8916_32/media/media_profiles_8916.xml:system/etc/media_profiles.xml \
@@ -33,7 +40,6 @@ PRODUCT_COPY_FILES += device/qcom/msm8916_32/media/media_profiles_8916.xml:syste
                       device/qcom/msm8916_32/media/media_codecs_8929.xml:system/etc/media_codecs_8929.xml
 endif
 
-TARGET_USES_QCA_NFC := other
 TARGET_USES_NQ_NFC := false
 
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -51,32 +57,38 @@ PRODUCT_BUILD_PROP_OVERRIDES += \
     BUILD_FINGERPRINT="asus/WW_Phone/ASUS_Z010:6.0.1/MMB29P/13.8.26.46-20160812:user/release-keys" \
     PRIVATE_BUILD_DESC="WW_Phone-user 6.0.1 MMB29P 13.8.26.46-20160812 release-keys"
 
-ifeq ($(strip $(TARGET_USES_QTIC)),true)
+# When can normal compile this module,  need module owner enable below commands
 # font rendering engine feature switch
 -include $(QCPATH)/common/config/rendering-engine.mk
 ifneq (,$(strip $(wildcard $(PRODUCT_RENDERING_ENGINE_REVLIB))))
-    MULTI_LANG_ENGINE := REVERIE
+     MULTI_LANG_ENGINE := REVERIE
 #    MULTI_LANG_ZAWGYI := REVERIE
 endif
-endif
+
 
 PRODUCT_BOOT_JARS += qcom.fmradio
 
 #PRODUCT_BOOT_JARS += vcard
 PRODUCT_BOOT_JARS += tcmiface
-PRODUCT_BOOT_JARS += qcmediaplayer
+#PRODUCT_BOOT_JARS += qcmediaplayer
+
+# QTI extended functionality of android telephony.
+# Required for MSIM manual provisioning and other related features.
+PRODUCT_PACKAGES += telephony-ext
+PRODUCT_BOOT_JARS += telephony-ext
 
 ifneq ($(strip $(QCPATH)),)
-PRODUCT_BOOT_JARS += com.qti.dpmframework
-PRODUCT_BOOT_JARS += dpmapi
-PRODUCT_BOOT_JARS += oem-services
-PRODUCT_BOOT_JARS += com.qti.location.sdk
+#PRODUCT_BOOT_JARS += com.qti.dpmframework
+#PRODUCT_BOOT_JARS += dpmapi
+#PRODUCT_BOOT_JARS += oem-services
+#PRODUCT_BOOT_JARS += com.qti.location.sdk
 endif
 
 #PRODUCT_BOOT_JARS += WfdCommon
 
 #Android EGL implementation
 PRODUCT_PACKAGES += libGLES_android
+
 
 PRODUCT_PACKAGES += \
     libqcomvisualizer \
@@ -113,6 +125,8 @@ PRODUCT_COPY_FILES += \
     device/asus/Z010D/audio/acdbdata/QRD/QRD_Headset_cal.acdb:system/etc/acdbdata/QRD/QRD_Headset_cal.acdb \
     device/asus/Z010D/audio/acdbdata/QRD/QRD_Speaker_cal.acdb:system/etc/acdbdata/QRD/QRD_Speaker_cal.acdbc
 
+-include $(TOPDIR)hardware/qcom/audio/configs/msm8916_64/msm8916_64.mk
+
 # MIDI feature
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.midi.xml:system/etc/permissions/android.software.midi.xml
@@ -137,15 +151,11 @@ ADDITIONAL_DEFAULT_PROPERTIES += \
     ro.adb.secure=0 \
     ro.secure=0
 
-
 PRODUCT_PACKAGES += wcnss_service
 
 # MSM IRQ Balancer configuration file
 PRODUCT_COPY_FILES += \
     device/asus/Z010D/msm_irqbalance.conf:system/vendor/etc/msm_irqbalance.conf
-
-# Device init
-PRODUCT_PACKAGES += libinit_z010d
 
 PRODUCT_PACKAGES += \
     wpa_supplicant_overlay.conf \
@@ -154,71 +164,17 @@ PRODUCT_PACKAGES += \
     WCNSS_cfg.dat \
     WCNSS_qcom_cfg.ini
 
-ifeq ($(TARGET_USES_QCA_NFC),true)
-NFC_D := true
-
-ifeq ($(NFC_D), true)
-    PRODUCT_PACKAGES += \
-        libqnfc-nci \
-        libqnfc_nci_jni \
-        nfc_nci.msm8916 \
-        QNfc \
-        Tag \
-        com.android.nfc_extras \
-        com.android.nfc.helper \
-        SmartcardService \
-        org.simalliance.openmobileapi \
-        org.simalliance.openmobileapi.xml \
-        libassd
-else
-    PRODUCT_PACKAGES += \
-    libnfc-nci \
-    libnfc_nci_jni \
-    nfc_nci.msm8916 \
-    NfcNci \
-    Tag \
-    com.android.nfc_extras
-endif
-
-# file that declares the MIFARE NFC constant
-# Commands to migrate prefs from com.android.nfc3 to com.android.nfc
-# NFC access control + feature files + configuration
-PRODUCT_COPY_FILES += \
-        packages/apps/Nfc/migrate_nfc.txt:system/etc/updatecmds/migrate_nfc.txt \
-        frameworks/native/data/etc/com.nxp.mifare.xml:system/etc/permissions/com.nxp.mifare.xml \
-        frameworks/native/data/etc/com.android.nfc_extras.xml:system/etc/permissions/com.android.nfc_extras.xml \
-        frameworks/native/data/etc/android.hardware.nfc.xml:system/etc/permissions/android.hardware.nfc.xml \
-        frameworks/native/data/etc/android.hardware.nfc.hce.xml:system/etc/permissions/android.hardware.nfc.hce.xml
-else
-ifeq ($(TARGET_USES_NQ_NFC),true)
-PRODUCT_PACKAGES += \
-    nfc.msm8916_64 \
-    NfcNci \
-    libnfc-nci \
-    libnfc_nci_jni \
-    nfc_nci.nqx.default \
-    Tag \
-    com.android.nfc_extras
-
-PRODUCT_COPY_FILES += \
-    packages/apps/Nfc/migrate_nfc.txt:system/etc/updatecmds/migrate_nfc.txt \
-    frameworks/native/data/etc/com.nxp.mifare.xml:system/etc/permissions/com.nxp.mifare.xml \
-    frameworks/native/data/etc/com.android.nfc_extras.xml:system/etc/permissions/com.android.nfc_extras.xml \
-    frameworks/native/data/etc/android.hardware.nfc.xml:system/etc/permissions/android.hardware.nfc.xml \
-    frameworks/native/data/etc/android.hardware.nfc.hce.xml:system/etc/permissions/android.hardware.nfc.hce.xml
-endif # TARGET_USES_NQ_NFC
-endif # TARGET_USES_QCA_NFC
-
 # Defined the locales
 PRODUCT_LOCALES += th_TH vi_VN tl_PH hi_IN ar_EG ru_RU tr_TR pt_BR bn_IN mr_IN ta_IN te_IN zh_HK \
         in_ID my_MM km_KH sw_KE uk_UA pl_PL sr_RS sl_SI fa_IR kn_IN ml_IN ur_IN gu_IN or_IN
 
+# When can normal compile this module,  need module owner enable below commands
 # Add the overlay path
-ifeq ($(strip $(TARGET_USES_QTIC)),true)
-PRODUCT_PACKAGE_OVERLAYS := $(QCPATH)/qrdplus/Extension/res-overlay \
-        $(QCPATH)/qrdplus/globalization/multi-language/res-overlay \
+#PRODUCT_PACKAGE_OVERLAYS := $(QCPATH)/qrdplus/Extension/res \
+#        $(PRODUCT_PACKAGE_OVERLAYS)
+
+PRODUCT_PACKAGE_OVERLAYS := $(QCPATH)/qrdplus/Extension/res \
         $(PRODUCT_PACKAGE_OVERLAYS)
-endif
 
 PRODUCT_SUPPORTS_VERITY := true
 PRODUCT_SYSTEM_VERITY_PARTITION := /dev/block/bootdevice/by-name/system
