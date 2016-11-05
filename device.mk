@@ -71,9 +71,14 @@ PRODUCT_COPY_FILES += \
     device/asus/Z010D/keylayout/focal-touchscreen.kl:system/usr/keylayout/focal-touchscreen.kl \
     device/asus/Z010D/keylayout/focal-touchscreen.idc:system/usr/idc/focal-touchscreen.kl
 
+# Camera
 PRODUCT_PACKAGES += \
     camera.msm8916 \
 		libshims_camera
+
+# DRM
+PRODUCT_PACKAGES += \
+     libshims_wvm
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     camera2.portability.force_api=1

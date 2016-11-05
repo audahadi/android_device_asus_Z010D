@@ -209,8 +209,8 @@ service qcamerasvr /system/bin/mm-qcamera-daemon
     group camera system inet input graphics
 
 on init
-   export LD_SHIM_LIBS /system/vendor/lib64/lib-imscamera.so|libshims_camera.so
-   
+   export LD_SHIM_LIBS /system/vendor/lib64/lib-imscamera.so|libshims_camera.so:/system/vendor/lib/libwvm.so|libshims_wvm.so
+
    write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
 
 # Allow usb charging to be disabled peristently
