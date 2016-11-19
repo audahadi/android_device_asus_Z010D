@@ -28,9 +28,9 @@
    IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
+#include <stdlib.h>
+#include <sys/sysinfo.h>
 
 #include "vendor_init.h"
 #include "property_service.h"
@@ -47,50 +47,16 @@ char const *heapgrowthlimit;
 char const *heapsize;
 char const *heapminfree;
 
-static void init_alarm_boot_properties()
-{
-    int boot_reason;
-    FILE *fp;
-
-    fp = fopen("/proc/sys/kernel/boot_reason", "r");
-    fscanf(fp, "%d", &boot_reason);
-    pclose(fp);
-
-    /*
-     * Setup ro.alarm_boot value to true when it is RTC triggered boot up
-     * For existing PMIC chips, the following mapping applies
-     * for the value of boot_reason:
-     *
-     * 0 -> unknown
-     * 1 -> hard reset
-     * 2 -> sudden momentary power loss (SMPL)
-     * 3 -> real time clock (RTC)
-     * 4 -> DC charger inserted
-     * 5 -> USB charger inserted
-     * 6 -> PON1 pin toggled (for secondary PMICs)
-     * 7 -> CBLPWR_N pin toggled (for external power supply)
-     * 8 -> KPDPWR_N pin toggled (power key pressed)
-     */
-     if (boot_reason == 3) {
-        property_set("ro.alarm_boot", "true");
-     } else {
-        property_set("ro.alarm_boot", "false");
-     }
-}
-
 void vendor_load_properties()
 {
 
     char b_description[PROP_VALUE_MAX], b_fingerprint[PROP_VALUE_MAX];
     char p_carrier[PROP_VALUE_MAX], p_device[PROP_VALUE_MAX], p_model[PROP_VALUE_MAX];
-    char platform[PROP_VALUE_MAX];
-    int rc;
+    std::string platform;
 
-    rc = property_get("ro.board.platform", platform);
-    if (!rc || !ISMATCH(platform, ANDROID_TARGET))
+    platform = property_get("ro.board.platform");
+    if (platform != ANDROID_TARGET)
         return;
-
-    init_alarm_boot_properties();
 
     /* Device Setting */
     family = "WW_Phone";
@@ -101,7 +67,7 @@ void vendor_load_properties()
     heapstartsize = "8m";
     heapgrowthlimit = "192m";
     heapsize = "512m";
-    heapminfree = "512k";
+    heapminfree = "2m";
 
     sprintf(b_description, "%s-user 6.0.1 MMB29P 13.8.26.46-20160812 release-keys", family);
     sprintf(b_fingerprint, "asus/%s/ASUS_%s:6.0.1/MMB29P/13.8.26.46-20160812:user/release-keys", family, device);
