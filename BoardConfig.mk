@@ -41,6 +41,8 @@ BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 an
 TARGET_KERNEL_APPEND_DTB := true
 BOARD_SECCOMP_POLICY := device/qcom/$(TARGET_BOARD_PLATFORM)$(TARGET_BOARD_SUFFIX)/seccomp
 
+DISABLE_THIS_DLKM := true
+
 BOARD_KERNEL_BASE        := 0x80000000
 BOARD_KERNEL_PAGESIZE    := 2048
 BOARD_KERNEL_TAGS_OFFSET := 0x00000100
@@ -72,7 +74,7 @@ BOARD_WLAN_DEVICE := qcwcn
 BOARD_WPA_SUPPLICANT_DRIVER := NL80211
 BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_qcwcn
 TARGET_USES_WCNSS_CTRL := true
-TARGET_USES_QCOM_WCNSS_QMI := true
+#TARGET_USES_QCOM_WCNSS_QMI := true
 WIFI_DRIVER_FW_PATH_AP := "ap"
 WIFI_DRIVER_FW_PATH_STA := "sta"
 WPA_SUPPLICANT_VERSION := VER_0_8_X
@@ -110,7 +112,7 @@ TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
 # Add NON-HLOS files for ota upgrade
 #ADD_RADIO_FILES := true
 TARGET_INIT_VENDOR_LIB := libinit_msm
-TARGET_LIBINIT_DEFINES_FILE := device/asus/init/libinit_z010d.cpp
+TARGET_LIBINIT_DEFINES_FILE := device/asus/Z010D/init/libinit_z010d.cpp
 
 #add suffix variable to uniquely identify the board
 TARGET_BOARD_SUFFIX := _64
@@ -148,3 +150,5 @@ endif
 
 #enabling IMS for this target
 TARGET_USES_IMS := true
+
+SIM_COUNT := 2
