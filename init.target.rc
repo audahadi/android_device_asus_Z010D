@@ -67,6 +67,39 @@ on fs
     chmod 660 /dev/block/mmcblk0p20
     #--- ASUS_BSP : add for user unlock
 
+    # +++ ASUS_BSP : add for asus boot animation partition
+    # mount ADF
+    wait /dev/block/bootdevice/by-name/ADF
+    mount ext4 /dev/block/bootdevice/by-name/ADF /ADF nosuid nodev barrier=1 data=ordered
+    chmod 0775 /ADF
+    chmod 0775 /ADF/boot
+    chown system system /ADF
+    restorecon_recursive /ADF
+
+    wait /dev/block/bootdevice/by-name/APD
+    mount ext4 /dev/block/bootdevice/by-name/APD /APD nosuid nodev barrier=1 data=ordered
+    chmod 0775 /APD
+    chown system system /APD
+    restorecon_recursive /APD
+    # --- ASUS_BSP : add for asus boot animation partition
+
+    # Freeman add for GTS  +++
+    chmod 0660 /dev/block/bootdevice/by-name/persistent
+    chown system system /dev/block/bootdevice/by-name/persistent
+    chmod 0660 /dev/block/mmcblk0p24
+    chown system system /dev/block/mmcblk0p24
+    # Freeman add for GTS  ---
+
+    # mount asusfw
+    wait /dev/block/bootdevice/by-name/asusfw
+    exec /system/bin/e2fsck -p /dev/block/bootdevice/by-name/asusfw
+    mount ext4 /dev/block/bootdevice/by-name/asusfw /asusfw nosuid nodev barrier=1 noauto_da_alloc
+    restorecon_recursive /asusfw
+    chmod 0775 /asusfw
+    chown system system /asusfw
+
+    start FWAuto
+
 on post-fs-data
     mkdir /data/tombstones 0771 system system
     mkdir /tombstones/modem 0771 system system
@@ -81,6 +114,128 @@ on post-fs-data
     chown system system /sys/afe_properties/hallib_name
     chown system system /sys/afe_properties/wake_up_enable
 
+    # mount factory
+    wait /dev/block/bootdevice/by-name/factory
+    exec /system/bin/e2fsck -p /dev/block/bootdevice/by-name/factory
+    mount ext4 /dev/block/bootdevice/by-name/factory /factory ro nosuid nodev barrier=1 noauto_da_alloc
+    restorecon_recursive /factory
+    chmod 0775 /factory
+    chown root shell /factory
+
+    start CheckProp
+
+    # mount asdf
+    wait /dev/block/bootdevice/by-name/asdf
+    exec /system/bin/e2fsck -p /dev/block/bootdevice/by-name/asdf
+    mount ext4 /dev/block/bootdevice/by-name/asdf /asdf nosuid nodev barrier=1
+    chmod 0777 /asdf
+    restorecon_recursive /asdf
+    start check_last
+    # mount factory
+    wait /dev/block/bootdevice/by-name/factory
+    exec /system/bin/e2fsck -p /dev/block/bootdevice/by-name/factory
+    mount ext4 /dev/block/bootdevice/by-name/factory /factory ro nosuid nodev barrier=1 noauto_da_alloc
+    restorecon_recursive /factory
+    chmod 0775 /factory
+    chown root shell /factory
+
+    start CheckProp
+
+    # mount asdf
+    wait /dev/block/bootdevice/by-name/asdf
+    exec /system/bin/e2fsck -p /dev/block/bootdevice/by-name/asdf
+    mount ext4 /dev/block/bootdevice/by-name/asdf /asdf nosuid nodev barrier=1
+    chmod 0777 /asdf
+    restorecon_recursive /asdf
+    start check_last
+
+    #ASUS_BSP Jeff_Gu : add for Led blink time +++
+    chown system system /sys/class/leds/red/on_ms
+    chmod 0664 /sys/class/leds/red/on_ms
+    chown system system /sys/class/leds/green/on_ms
+    chmod 0664 /sys/class/leds/green/on_ms
+    chown system system /sys/class/leds/red/off_ms
+    chmod 0664 /sys/class/leds/red/off_ms
+    chown system system /sys/class/leds/green/off_ms
+    chmod 0664 /sys/class/leds/green/off_ms
+    #ASUS_BSP Jeff_Gu : add for Led blink time ---
+
+    #ASUS_BSP +++ srhuang "Hall Sensor"
+    symlink /sys/bus/platform/devices/soc.0/hall_sensor/hall_sensor/status	/data/data/hallsensor_status
+    symlink /sys/bus/platform/devices/soc.0/hall_sensor/hall_sensor/debounce	/data/data/hallsensor_debounce
+    chmod 0600 /data/data/hallsensor_status
+    chmod 0600 /data/data/hallsensor_debounce
+    #ASUS_BSP --- srhuang "Hall Sensor"
+
+    #ASUS_BSP +++ srhuang "Zen Motion"
+    chown system shell /sys/bus/i2c/devices/0-001f/double_tap
+    chown system shell /sys/bus/i2c/devices/0-001f/flip
+    chown system shell /sys/bus/i2c/devices/0-001f/flick
+    chown system shell /sys/bus/i2c/devices/0-001f/hands
+    #ASUS_BSP --- srhuang "Zen Motion"
+
+    #ASUS_BSP +++ Surya_Xu "CSC Laser"
+    chown media sdcard_rw /proc/driver/LaserFocus_on
+    chown media sdcard_rw /proc/driver/LaserFocus_value
+    chown system sdcard_rw /proc/driver/LaserFocus_Status
+    chown media sdcard_rw /proc/driver/LaserFocus_Status_For_Camera
+    chown system sdcard_rw /proc/driver/LaserFocus_CalStart
+    chown system sdcard_rw /proc/driver/LaserFocus_enforce
+    chown system sdcard_rw /proc/driver/LaserFocus_value_more_info
+    chown system sdcard_rw /proc/driver/LaserFocus_debug_dump
+    chown system sdcard_rw /proc/driver/LaserFocus_I2c_Status
+
+    rm /data/data/LaserFocus_on
+    rm /data/data/LaserFocus_value
+    rm /data/data/LaserFocus_value_more_info
+    rm /data/data/LaserFocus_Status
+    rm /data/data/LaserFocus_CalStart
+    rm /data/data/LaserFocus_disable
+    rm /data/data/LaserFocus_debug_dump
+    rm /data/data/LaserFocus_I2c_Status
+
+    symlink /system/bin/LaserFocus_on /data/data/LaserFocus_on
+    symlink /proc/driver/LaserFocus_value /data/data/LaserFocus_value
+    symlink /proc/driver/LaserFocus_value_more_info /data/data/LaserFocus_value_more_info
+    symlink /proc/driver/LaserFocus_Status /data/data/LaserFocus_Status
+    symlink /system/bin/LaserFocus_CalStart /data/data/LaserFocus_CalStart
+    symlink /system/bin/LaserFocus_enforce /data/data/LaserFocus_disable
+    symlink /proc/driver/LaserFocus_debug_dump /data/data/LaserFocus_debug_dump
+    symlink /proc/driver/LaserFocus_I2c_Status /data/data/LaserFocus_I2c_Status
+    #ASUS_BSP --- Surya_Xu "CSC Laser"
+
+    # ASUS_BSP +++ Peter_Lu "Akm09911 compass sensor & KX022 Gsensor"
+    #  Permissions for Sensors
+    # accelerometer kx022
+    chown system system /sys/bus/i2c/devices/0-001f/enable
+    chown system system /sys/bus/i2c/devices/0-001f/delay
+
+    chmod 0660 /sys/bus/i2c/devices/0-001f/enable
+    chmod 0660 /sys/bus/i2c/devices/0-001f/delay
+
+    # AKM E-compass
+    chown system system /sys/class/compass/akm09911/enable_acc
+    chown system system /sys/class/compass/akm09911/enable_mag
+    chown system system /sys/class/compass/akm09911/enable_fusion
+    chown system system /sys/class/compass/akm09911/delay_acc
+    chown system system /sys/class/compass/akm09911/delay_mag
+    chown system system /sys/class/compass/akm09911/delay_fusion
+    chown system system /sys/class/compass/akm09911/accel
+    chown system system /dev/akm09911_dev
+
+    chmod 0660 /sys/class/compass/akm09911/enable_mag
+    chmod 0660 /sys/class/compass/akm09911/delay_mag
+    chmod 0660 /sys/class/compass/akm09911/enable_acc
+    chmod 0660 /sys/class/compass/akm09911/delay_acc
+    chmod 0660 /sys/class/compass/akm09911/enable_fusion
+    chmod 0660 /sys/class/compass/akm09911/delay_fusion
+    chmod 0660 /dev/akm09911_dev
+
+    chmod 0774 /sys/devices/virtual/compass/akm09911/akm_status
+    chmod 0774 /sys/devices/virtual/compass/akm09911/akm_09911_raw
+    chmod 0774 /sys/devices/virtual/compass/akm09911/akm_i2c
+    chmod 0774 /sys/bus/i2c/devices/0-000f/Gsensor_raw
+    chmod 0774 /sys/bus/i2c/devices/0-000f/Gsensor_status
 
 #start camera server as daemon
 service qcamerasvr /system/bin/mm-qcamera-daemon
