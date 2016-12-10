@@ -177,6 +177,10 @@ ro.sys.fw.dex2oat_thread_count=4
 ro.core_ctl_min_cpu=2
 ro.core_ctl_max_cpu=4
 
+# camera
+media.stagefright.legacyencoder=true
+media.stagefright.less-secure=true
+
 wifi.interface=wlan0
 ro.sf.lcd_density=320
 persist.radio.add_power_save=1
