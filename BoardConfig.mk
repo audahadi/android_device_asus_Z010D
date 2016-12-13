@@ -38,6 +38,9 @@ TARGET_RECOVERY_DEVICE_MODULES := libinit_msm8916
 #Enable SW based full disk encryption
 TARGET_SWV8_DISK_ENCRYPTION := true
 
+# Charger
+BOARD_CHARGER_ENABLE_SUSPEND := true
+
 # Wifi
 BOARD_HAS_QCOM_WLAN := true
 BOARD_HAS_QCOM_WLAN_SDK := true
