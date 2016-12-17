@@ -94,8 +94,8 @@ PRODUCT_PACKAGES += \
 		WCNSS_qcom_wlan_nv.bin
 
 PRODUCT_COPY_FILES += \
-    kernel/asus/Z010D/drivers/staging/prima/firmware_bin/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
-    kernel/asus/Z010D/drivers/staging/prima/firmware_bin/WCNSS_qcom_cfg.ini:system/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini
+    kernel/asus/Z010D/drivers/staging/prima-Z010/firmware_bin/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
+    kernel/asus/Z010D/drivers/staging/prima-Z010/firmware_bin/WCNSS_qcom_cfg.ini:system/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini
 
 # Keylayout
 PRODUCT_COPY_FILES += \
