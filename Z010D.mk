@@ -6,7 +6,6 @@ DEVICE_PACKAGE_OVERLAYS := device/asus/Z010D/overlay
 
 # call the proprietary setup
 $(call inherit-product-if-exists, vendor/asus/Z010D/Z010D-vendor.mk)
-#$(call inherit-product-if-exists, vendor/asus/msm8916-common/msm8916-common-vendor.mk)
 
 $(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
 
@@ -44,6 +43,7 @@ TARGET_USES_NQ_NFC := false
 
 PRODUCT_PROPERTY_OVERRIDES += \
            dalvik.vm.heapgrowthlimit=128m
+
 $(call inherit-product, device/qcom/common/common64.mk)
 
 PRODUCT_NAME := Z010D
