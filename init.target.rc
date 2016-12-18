@@ -40,6 +40,17 @@ on early-init
 on post-fs
     export LD_PRELOAD libNimsWrap.so
 
+on early-boot
+    # Set RLIMIT_MEMLOCK to 64MB
+    setrlimit 8 67108864 67108864
+
+    # SSR Setup
+    write /sys/bus/msm_subsys/devices/subsys0/restart_level "related"
+    write /sys/bus/msm_subsys/devices/subsys1/restart_level "related"
+    write /sys/bus/msm_subsys/devices/subsys2/restart_level "related"
+
+    write /sys/kernel/boot_adsp/boot 1
+
 on fs
     wait /dev/block/bootdevice
     mount_all fstab.qcom
