@@ -47,13 +47,3 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_COPY_FILES += \
     device/asus/Z010D/audio/mixer_paths_mtp.xml:system/etc/mixer_paths_mtp.xml
-		
-# Keylayout
-PRODUCT_COPY_FILES += \
-    device/asus/Z010D/keylayout/ASUS_TransKeyboard.kl:system/usr/keylayout/ASUS_TransKeyboard.kl \
-    device/asus/Z010D/keylayout/focal-touchscreen.kl:system/usr/keylayout/focal-touchscreen.kl \
-    device/asus/Z010D/keylayout/ft5x06_ts.kl:system/usr/keylayout/ft5x06_ts.kl \
-    device/asus/Z010D/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
-    device/asus/Z010D/keylayout/i-rocks_Bluetooth_Keyboard.kl:system/usr/keylayout/i-rocks_Bluetooth_Keyboard.kl \
-    device/asus/Z010D/keylayout/synaptics_dsx.kl:system/usr/keylayout/synaptics_dsx.kl \
-    device/asus/Z010D/keylayout/synaptics_rmi4_i2c.kl:system/usr/keylayout/synaptics_rmi4_i2c.kl
