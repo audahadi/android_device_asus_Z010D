@@ -43,3 +43,5 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.fusion.magfield.max=250
 
+PRODUCT_PACKAGES += \
+    WCNSS_qcom_wlan_nv.bin
