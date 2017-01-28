@@ -158,6 +158,6 @@ ifneq ($(TARGET_BUILD_VARIANT),user)
 endif
 
 #enabling IMS for this target
-#TARGET_USES_IMS := true
+TARGET_USES_IMS := true
 
 SIM_COUNT := 2

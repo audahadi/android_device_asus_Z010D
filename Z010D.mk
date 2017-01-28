@@ -1,6 +1,7 @@
 TARGET_USES_QCOM_BSP := true
 # Add QC Video Enhancements flag
 TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
+DISABLE_THIS_DLKM := true
 
 DEVICE_PACKAGE_OVERLAYS := device/asus/Z010D/overlay
 
@@ -80,7 +81,7 @@ PRODUCT_BOOT_JARS += telephony-ext
 ifneq ($(strip $(QCPATH)),)
 #PRODUCT_BOOT_JARS += com.qti.dpmframework
 #PRODUCT_BOOT_JARS += dpmapi
-#PRODUCT_BOOT_JARS += oem-services
+PRODUCT_BOOT_JARS += oem-services
 #PRODUCT_BOOT_JARS += com.qti.location.sdk
 endif
 
