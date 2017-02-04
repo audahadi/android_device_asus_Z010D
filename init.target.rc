@@ -392,16 +392,4 @@ service per_mgr /system/bin/pm-service
     class core
     user system
     group system net_raw
-
-service instant_camera /system/etc/init.asus.keycamera.sh
-    user root
-    group root
-    disabled
-    oneshot
-    seclabel u:r:instant_camera:s0
-
-on property:persist.asus.instant_camera=0
-    start instant_camera
-
-on property:persist.asus.instant_camera=1
-    start instant_camera
+    group system
