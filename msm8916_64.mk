@@ -1,7 +1,7 @@
 TARGET_USES_QCOM_BSP := true
 # Add QC Video Enhancements flag
 TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
-DISABLE_THIS_DLKM := true
+BOARD_USES_LIBC_WRAPPER := true
 
 DEVICE_PACKAGE_OVERLAYS := device/asus/Z010D/overlay
 
