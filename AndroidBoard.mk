@@ -170,6 +170,14 @@ LOCAL_MODULE_PATH  := $(TARGET_OUT_ETC)/hostapd
 LOCAL_SRC_FILES    := hostapd.deny
 include $(BUILD_PREBUILT)
 
+include $(CLEAR_VARS)
+LOCAL_MODULE       := WCNSS_qcom_wlan_nv.bin
+LOCAL_MODULE_TAGS  := optional
+LOCAL_MODULE_CLASS := ETC
+LOCAL_SRC_FILES    := $(LOCAL_MODULE)
+LOCAL_MODULE_PATH  := $(TARGET_OUT_ETC)/firmware/wlan/prima
+include $(BUILD_PREBUILT)
+
 WCNSS_CONFIG_SYMLINK := $(TARGET_OUT_ETC)/firmware/wlan/prima/WCNSS_qcom_cfg.ini
 $(WCNSS_CONFIG_SYMLINK): $(LOCAL_INSTALLED_MODULE)
 	@echo "WCNSS config link: $@"

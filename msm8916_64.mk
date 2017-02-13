@@ -5,16 +5,9 @@ BOARD_USES_LIBC_WRAPPER := true
 
 DEVICE_PACKAGE_OVERLAYS := device/asus/Z010D/overlay
 
-# call the proprietary setup
-$(call inherit-product-if-exists, vendor/asus/Z010D/Z010D-vendor.mk)
-
-$(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
-
 # Ramdisk
 PRODUCT_PACKAGES += \
-    init.asus.rc \
-    cameratoolbxs \
-    sp
+    init.asus.rc
 
 PRODUCT_AAPT_CONFIG := normal hdpi xhdpi
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
@@ -104,43 +97,6 @@ PRODUCT_COPY_FILES += \
     device/asus/Z010D/audio/sound_trigger_mixer_paths_wcd9306.xml:system/etc/sound_trigger_mixer_paths_wcd9306.xml \
     device/asus/Z010D/audio/sound_trigger_platform_info.xml:system/etc/sound_trigger_platform_info.xml
 
-PRODUCT_COPY_FILES += \
-		device/asus/Z010D/audio/acdbdata/MTP/MP/MTP_MP_Bluetooth_cal.acdb:system/etc/acdbdata/MTP/MP/MTP_MP_Bluetooth_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/MTP/MP/MTP_MP_General_cal.acdb:system/etc/acdbdata/MTP/MP/MTP_MP_General_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/MTP/MP/MTP_MP_Global_cal.acdb:system/etc/acdbdata/MTP/MP/MTP_MP_Global_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/MTP/MP/MTP_MP_Handset_cal.acdb:system/etc/acdbdata/MTP/MP/MTP_MP_Handset_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/MTP/MP/MTP_MP_Hdmi_cal.acdb:system/etc/acdbdata/MTP/MP/MTP_MP_Hdmi_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/MTP/MP/MTP_MP_Headset_cal.acdb:system/etc/acdbdata/MTP/MP/MTP_MP_Headset_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/MTP/MP/MTP_MP_Speaker_cal.acdb:system/etc/acdbdata/MTP/MP/MTP_MP_Speaker_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/MTP/msm8939-tapan-snd-card/MTP_WCD9306_Bluetooth_cal.acdb:system/etc/acdbdata/MTP/msm8939-tapan-snd-card/MTP_WCD9306_Bluetooth_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/MTP/msm8939-tapan-snd-card/MTP_WCD9306_General_cal.acdb:system/etc/acdbdata/MTP/msm8939-tapan-snd-card/MTP_WCD9306_General_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/MTP/msm8939-tapan-snd-card/MTP_WCD9306_Global_cal.acdb:system/etc/acdbdata/MTP/msm8939-tapan-snd-card/MTP_WCD9306_Global_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/MTP/msm8939-tapan-snd-card/MTP_WCD9306_Handset_cal.acdb:system/etc/acdbdata/MTP/msm8939-tapan-snd-card/MTP_WCD9306_Handset_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/MTP/msm8939-tapan-snd-card/MTP_WCD9306_Hdmi_cal.acdb:system/etc/acdbdata/MTP/msm8939-tapan-snd-card/MTP_WCD9306_Hdmi_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/MTP/msm8939-tapan-snd-card/MTP_WCD9306_Headset_cal.acdb:system/etc/acdbdata/MTP/msm8939-tapan-snd-card/MTP_WCD9306_Headset_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/MTP/msm8939-tapan-snd-card/MTP_WCD9306_Speaker_cal.acdb:system/etc/acdbdata/MTP/msm8939-tapan-snd-card/MTP_WCD9306_Speaker_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/MTP/MTP_Bluetooth_cal.acdb:system/etc/acdbdata/MTP/MTP_Bluetooth_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/MTP/MTP_General_cal.acdb:system/etc/acdbdata/MTP/MTP_General_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/MTP/MTP_Global_cal.acdb:system/etc/acdbdata/MTP/MTP_Global_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/MTP/MTP_Handset_cal.acdb:system/etc/acdbdata/MTP/MTP_Handset_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/MTP/MTP_Hdmi_cal.acdb:system/etc/acdbdata/MTP/MTP_Hdmi_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/MTP/MTP_Headset_cal.acdb:system/etc/acdbdata/MTP/MTP_Headset_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/MTP/MTP_Speaker_cal.acdb:system/etc/acdbdata/MTP/MTP_Speaker_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/QRD/msm8939-snd-card-skul/QRD_SKUL_Bluetooth_cal.acdb:system/etc/acdbdata/QRD/msm8939-snd-card-skul/QRD_SKUL_Bluetooth_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/QRD/msm8939-snd-card-skul/QRD_SKUL_General_cal.acdb:system/etc/acdbdata/QRD/msm8939-snd-card-skul/QRD_SKUL_General_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/QRD/msm8939-snd-card-skul/QRD_SKUL_Global_cal.acdb:system/etc/acdbdata/QRD/msm8939-snd-card-skul/QRD_SKUL_Global_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/QRD/msm8939-snd-card-skul/QRD_SKUL_Handset_cal.acdb:system/etc/acdbdata/QRD/msm8939-snd-card-skul/QRD_SKUL_Handset_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/QRD/msm8939-snd-card-skul/QRD_SKUL_Hdmi_cal.acdb:system/etc/acdbdata/QRD/msm8939-snd-card-skul/QRD_SKUL_Hdmi_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/QRD/msm8939-snd-card-skul/QRD_SKUL_Headset_cal.acdb:system/etc/acdbdata/QRD/msm8939-snd-card-skul/QRD_SKUL_Headset_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/QRD/msm8939-snd-card-skul/QRD_SKUL_Speaker_cal.acdb:system/etc/acdbdata/QRD/msm8939-snd-card-skul/QRD_SKUL_Speaker_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/QRD/QRD_Bluetooth_cal.acdb:system/etc/acdbdata/QRD/QRD_Bluetooth_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/QRD/QRD_General_cal.acdb:system/etc/acdbdata/QRD/QRD_General_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/QRD/QRD_Global_cal.acdb:system/etc/acdbdata/QRD/QRD_Global_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/QRD/QRD_Handset_cal.acdb:system/etc/acdbdata/QRD/QRD_Handset_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/QRD/QRD_Hdmi_cal.acdb:system/etc/acdbdata/QRD/QRD_Hdmi_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/QRD/QRD_Headset_cal.acdb:system/etc/acdbdata/QRD/QRD_Headset_cal.acdb \
-		device/asus/Z010D/audio/acdbdata/QRD/QRD_Speaker_cal.acdb:system/etc/acdbdata/QRD/QRD_Speaker_cal.acdb
-
 -include $(TOPDIR)hardware/qcom/audio/configs/msm8916_64/msm8916_64.mk
 
 # MIDI feature
@@ -162,11 +118,8 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     persist.sys.usb.config=mtp,adb \
     camera2.portability.force_api=1
 
-# Development settings
-ADDITIONAL_DEFAULT_PROPERTIES += \
-    ro.debuggable=1 \
-    ro.adb.secure=0 \
-    ro.secure=0
+PRODUCT_PROPERTY_OVERRIDES += \
+    qemu.hw.mainkeys=0
 
 PRODUCT_PACKAGES += wcnss_service
 
@@ -174,12 +127,15 @@ PRODUCT_PACKAGES += wcnss_service
 PRODUCT_COPY_FILES += \
     device/asus/Z010D/msm_irqbalance.conf:system/vendor/etc/msm_irqbalance.conf
 
+# Wifi
+PRODUCT_COPY_FILES += \
+    vendor/qcom/opensource/wlan/prima/firmware_bin/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
+    vendor/qcom/opensource/wlan/prima/firmware_bin/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini
+
 PRODUCT_PACKAGES += \
     wpa_supplicant_overlay.conf \
     p2p_supplicant_overlay.conf \
-    WCNSS_qcom_wlan_nv.bin \
-    WCNSS_cfg.dat \
-    WCNSS_qcom_cfg.ini
+    WCNSS_qcom_wlan_nv.bin
 
 # Defined the locales
 PRODUCT_LOCALES += th_TH vi_VN tl_PH hi_IN ar_EG ru_RU tr_TR pt_BR bn_IN mr_IN ta_IN te_IN zh_HK \
@@ -201,12 +157,13 @@ PRODUCT_PACKAGE_OVERLAYS := $(QCPATH)/qrdplus/Extension/res \
 PRODUCT_COPY_FILES += \
     device/asus/Z010D/sensors/hals.conf:system/etc/sensors/hals.conf
 
-# Bootanimation
-PRODUCT_COPY_FILES += \
-    device/asus/Z010D/bootanimation.zip:system/media/bootanimation.zip
-
 PRODUCT_COPY_FILES += \
     device/asus/Z010D/btwifimac.sh:system/etc/btwifimac.sh \
     device/asus/Z010D/rootdir/etc/sensor_init.sh:system/etc/sensor_init.sh
 
 GMS_ENABLE_OPTIONAL_MODULES := false
+
+# call the proprietary setup
+$(call inherit-product-if-exists, vendor/asus/Z010D/Z010D-vendor.mk)
+
+$(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
