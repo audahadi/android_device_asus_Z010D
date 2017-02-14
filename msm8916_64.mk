@@ -106,7 +106,7 @@ PRODUCT_COPY_FILES += \
 # Keylayout
 PRODUCT_COPY_FILES += \
     device/asus/Z010D/keylayout/focal-touchscreen.kl:system/usr/keylayout/focal-touchscreen.kl \
-		device/asus/Z010D/keylayout/focal-touchscreen.idc:system/usr/idc/focal-touchscreen.kl
+    device/asus/Z010D/keylayout/focal-touchscreen.idc:system/usr/idc/focal-touchscreen.kl
 
 #ANT+ stack
 PRODUCT_PACKAGES += \
@@ -130,12 +130,9 @@ PRODUCT_COPY_FILES += \
 # Wifi
 PRODUCT_COPY_FILES += \
     vendor/qcom/opensource/wlan/prima/firmware_bin/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
-    vendor/qcom/opensource/wlan/prima/firmware_bin/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini
+    vendor/qcom/opensource/wlan/prima/firmware_bin/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini \
+    device/asus/Z010D/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
 
-PRODUCT_PACKAGES += \
-    wpa_supplicant_overlay.conf \
-    p2p_supplicant_overlay.conf \
-    WCNSS_qcom_wlan_nv.bin
 
 # Defined the locales
 PRODUCT_LOCALES += th_TH vi_VN tl_PH hi_IN ar_EG ru_RU tr_TR pt_BR bn_IN mr_IN ta_IN te_IN zh_HK \

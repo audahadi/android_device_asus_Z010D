@@ -90,12 +90,6 @@ WIFI_DRIVER_FW_PATH_P2P := "p2p"
 BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
 BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
 BOARD_HAS_CFG80211_KERNEL3_10 := true
-CONFIG_EAP_PROXY := qmi
-ifneq ($(wildcard vendor/qcom/proprietary/mdm-helper/libmdmdetect),)
-  CONFIG_EAP_PROXY_MDM_DETECT := true
-endif
-CONFIG_EAP_PROXY_DUAL_SIM := true
-CONFIG_EAP_PROXY_AKA_PRIME := true
 
 # Workaround framework bluetooth dependency
 BOARD_HAVE_BLUETOOTH := true
