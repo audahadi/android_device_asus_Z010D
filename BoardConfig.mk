@@ -3,14 +3,13 @@
 # Product-specific compile-time definitions.
 #
 
+-include device/qcom/msm8916-common/BoardConfigCommon.mk
+
 # Assert
 TARGET_OTA_ASSERT_DEVICE := Z010D,Z010,ASUS_Z010
 
 TARGET_BOARD_PLATFORM := msm8916
 TARGET_BOARD_PLATFORM_VARIANT := msm8916
-TARGET_BOOTLOADER_BOARD_NAME := msm8916
-TARGET_NO_BOOTLOADER := true
-BOARD_USES_QCOM_HARDWARE := true
 
 NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
 TARGET_ARCH := arm64
@@ -25,9 +24,6 @@ TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
 TARGET_2ND_CPU_VARIANT := cortex-a53
 
-BOOTLOADER_GCC_VERSION := arm-eabi-4.8
-BOOTLOADER_PLATFORM := msm8916 # use msm8952 LK configuration
-
 USE_CLANG_PLATFORM_BUILD := true
 TARGET_DISABLE_DASH := true
 
@@ -39,6 +35,7 @@ TARGET_KERNEL_SOURCE := kernel/asus/msm8916
 TARGET_KERNEL_CONFIG := zc550kl-perf_defconfig
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom msm_rtb.filter=0x237 ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci lpm_levels.sleep_disabled=1 earlyprintk androidboot.selinux=permissive
+BOARD_KERNEL_IMAGE_NAME := zImage-dtb
 TARGET_KERNEL_APPEND_DTB := true
 BOARD_SECCOMP_POLICY := device/asus/Z010D/seccomp
 
@@ -64,16 +61,7 @@ BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
 # Camera
 USE_CAMERA_STUB := true
 TARGET_HAS_LEGACY_CAMERA_HAL1 := true
-TARGET_NEEDS_TEXT_RELOCATIONS := true
-
-# Audio
-AUDIO_FEATURE_ENABLED_MULTI_VOICE_SESSIONS := true
-AUDIO_FEATURE_ENABLED_AUDIOSPHERE := true
-AUDIO_FEATURE_ENABLED_KPI_OPTIMIZE := true
-AUDIO_FEATURE_ENABLED_NEW_SAMPLE_RATE := true
-BOARD_USES_ALSA_AUDIO := true
-USE_CUSTOM_AUDIO_POLICY := 1
-TARGET_USES_QCOM_MM_AUDIO := true
+TARGET_ALLOW_TEXT_RELOCATIONS := true
 
 # Wifi
 BOARD_HAS_QCOM_WLAN := true
@@ -115,12 +103,15 @@ MAX_EGL_CACHE_KEY_SIZE := 12*1024
 # of the device.
 MAX_EGL_CACHE_SIZE := 2048*1024
 
+TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
+
+MAX_VIRTUAL_DISPLAY_DIMENSION := 2048
+
 BOARD_EGL_CFG := device/asus/Z010D/egl.cfg
 TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
-# Add NON-HLOS files for ota upgrade
-#ADD_RADIO_FILES := true
+
 TARGET_INIT_VENDOR_LIB := libinit_msm
-TARGET_LIBINIT_DEFINES_FILE := device/asus/Z010D/init/init_z010d.cpp
+TARGET_LIBINIT_DEFINES_FILE := init_z010d
 
 #add suffix variable to uniquely identify the board
 TARGET_BOARD_SUFFIX := _64
@@ -130,13 +121,6 @@ TARGET_HW_DISK_ENCRYPTION := true
 
 #Enable SW based full disk encryption
 TARGET_SWV8_DISK_ENCRYPTION := true
-
-TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
-
-MAX_VIRTUAL_DISPLAY_DIMENSION := 2048
-
-# Enable sensor multi HAL
-#USE_SENSOR_MULTI_HAL := true
 
 FEATURE_QCRIL_UIM_SAP_SERVER_MODE := true
 
@@ -150,14 +134,7 @@ TARGET_PER_MGR_ENABLED := true
 TARGET_TAP_TO_WAKE_NODE := "/sys/bus/i2c/devices/i2c-5/5-0038/dclick_mode"
 
 WITH_DEXPREOPT := false
-ifneq ($(TARGET_BUILD_VARIANT),user)
+#ifneq ($(TARGET_BUILD_VARIANT),user)
   # Retain classes.dex in APK's for non-user builds
-  DEX_PREOPT_DEFAULT := nostripping
-endif
-
-#enabling IMS for this target
-TARGET_USES_IMS := true
-
-SIM_COUNT := 2
-
--include device/qcom/msm8916-common/BoardConfigCommon.mk
+#  DEX_PREOPT_DEFAULT := nostripping
+#endif

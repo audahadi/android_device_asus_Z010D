@@ -2,6 +2,7 @@ TARGET_USES_QCOM_BSP := true
 # Add QC Video Enhancements flag
 TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
 BOARD_USES_LIBC_WRAPPER := true
+TARGET_USE_VENDOR_CAMERA_EXT := true
 
 DEVICE_PACKAGE_OVERLAYS := device/asus/Z010D/overlay
 
@@ -12,7 +13,6 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_AAPT_CONFIG := normal hdpi xhdpi
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
-
 
 #for android_filesystem_config.h
 PRODUCT_PACKAGES += \
@@ -28,9 +28,12 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 $(call inherit-product, device/qcom/msm8916-common/msm8916.mk)
 
+PRODUCT_PACKAGES += telephony-ext
+PRODUCT_PACKAGES += libGLES_android
 
 PRODUCT_BOOT_JARS += qcom.fmradio
-
+PRODUCT_BOOT_JARS += tcmiface
+PRODUCT_BOOT_JARS += telephony-ext
 
 PRODUCT_PACKAGES += \
     libqcomvisualizer \
@@ -68,7 +71,6 @@ PRODUCT_COPY_FILES += \
     device/asus/Z010D/keylayout/focal-touchscreen.idc:system/usr/idc/focal-touchscreen.kl
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mtp,adb \
     camera2.portability.force_api=1
 
 PRODUCT_PROPERTY_OVERRIDES += \
