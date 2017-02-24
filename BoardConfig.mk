@@ -3,12 +3,11 @@
 # Product-specific compile-time definitions.
 #
 
--include $(QCPATH)/common/msm8916/BoardConfigVendor.mk
-
 # Assert
 TARGET_OTA_ASSERT_DEVICE := Z010D,Z010,ASUS_Z010
 
 TARGET_BOARD_PLATFORM := msm8916
+TARGET_BOARD_PLATFORM_VARIANT := msm8916
 TARGET_BOOTLOADER_BOARD_NAME := msm8916
 TARGET_NO_BOOTLOADER := true
 BOARD_USES_QCOM_HARDWARE := true
@@ -36,10 +35,12 @@ TARGET_COMPILE_WITH_MSM_KERNEL := true
 TARGET_NO_KERNEL := false
 TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_HEADER_ARCH := arm64
+TARGET_KERNEL_SOURCE := kernel/asus/msm8916
+TARGET_KERNEL_CONFIG := zc550kl-perf_defconfig
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom msm_rtb.filter=0x237 ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci lpm_levels.sleep_disabled=1 earlyprintk androidboot.selinux=permissive
 TARGET_KERNEL_APPEND_DTB := true
-BOARD_SECCOMP_POLICY := device/qcom/$(TARGET_BOARD_PLATFORM)$(TARGET_BOARD_SUFFIX)/seccomp
+BOARD_SECCOMP_POLICY := device/asus/Z010D/seccomp
 
 BOARD_KERNEL_BASE        := 0x80000000
 BOARD_KERNEL_PAGESIZE    := 2048
@@ -75,28 +76,23 @@ USE_CUSTOM_AUDIO_POLICY := 1
 TARGET_USES_QCOM_MM_AUDIO := true
 
 # Wifi
+BOARD_HAS_QCOM_WLAN := true
 BOARD_WLAN_DEVICE := qcwcn
-BOARD_WPA_SUPPLICANT_DRIVER := NL80211
 BOARD_HOSTAPD_DRIVER := NL80211
-WIFI_DRIVER_MODULE_PATH := "/system/lib/modules/wlan.ko"
-WIFI_DRIVER_MODULE_NAME := "wlan"
-WIFI_DRIVER_MODULE_ARG := ""
-WPA_SUPPLICANT_VERSION := VER_0_8_X
-HOSTAPD_VERSION := VER_0_8_X
-TARGET_USES_QCOM_WCNSS_QMI := true
+BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_qcwcn
+BOARD_WPA_SUPPLICANT_DRIVER := NL80211
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_qcwcn
+WIFI_DRIVER_FW_PATH_AP := "ap"
 WIFI_DRIVER_FW_PATH_STA := "sta"
-WIFI_DRIVER_FW_PATH_AP  := "ap"
-WIFI_DRIVER_FW_PATH_P2P := "p2p"
-BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
-BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
-BOARD_HAS_CFG80211_KERNEL3_10 := true
+WPA_SUPPLICANT_VERSION := VER_0_8_X
+#TARGET_USES_QCOM_WCNSS_QMI := true
 
 # Workaround framework bluetooth dependency
 BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_QCOM := true
 QCOM_BT_USE_SMD_TTY := true
 BLUETOOTH_HCI_USE_MCT := true
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/qcom/common
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/qcom/msm8916-common/configs
 
 # Added to indicate that protobuf-c is supported in this build
 PROTOBUF_SUPPORTED := false
@@ -124,14 +120,13 @@ TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
 # Add NON-HLOS files for ota upgrade
 #ADD_RADIO_FILES := true
 TARGET_INIT_VENDOR_LIB := libinit_msm
-TARGET_LIBINIT_DEFINES_FILE := device/asus/Z010D/init/libinit_z010d.cpp
+TARGET_LIBINIT_DEFINES_FILE := device/asus/Z010D/init/init_z010d.cpp
 
 #add suffix variable to uniquely identify the board
 TARGET_BOARD_SUFFIX := _64
 
 #Enable HW based full disk encryption
 TARGET_HW_DISK_ENCRYPTION := true
-TARGET_CRYPTFS_HW_PATH := device/qcom/common/cryptfs_hw
 
 #Enable SW based full disk encryption
 TARGET_SWV8_DISK_ENCRYPTION := true
@@ -164,3 +159,5 @@ endif
 TARGET_USES_IMS := true
 
 SIM_COUNT := 2
+
+-include device/qcom/msm8916-common/BoardConfigCommon.mk

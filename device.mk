@@ -7,13 +7,12 @@ DEVICE_PACKAGE_OVERLAYS := device/asus/Z010D/overlay
 
 # Ramdisk
 PRODUCT_PACKAGES += \
-    init.asus.rc
+    init.asus.rc \
+    init.target.rc
 
 PRODUCT_AAPT_CONFIG := normal hdpi xhdpi
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
-#QTIC flag
--include $(QCPATH)/common/config/qtic-config.mk
 
 #for android_filesystem_config.h
 PRODUCT_PACKAGES += \
@@ -22,55 +21,15 @@ PRODUCT_PACKAGES += \
 # Enable features in video HAL that can compile only on this platform
 TARGET_USES_MEDIA_EXTENSIONS := true
 
-# media_profiles and media_codecs xmls for 8916
-ifeq ($(TARGET_ENABLE_QC_AV_ENHANCEMENTS), true)
-PRODUCT_COPY_FILES += device/qcom/msm8916_32/media/media_profiles_8916.xml:system/etc/media_profiles.xml \
-                      device/qcom/msm8916_32/media/media_codecs_8916.xml:system/etc/media_codecs.xml \
-                      device/qcom/msm8916_32/media/media_codecs_performance_8916_64.xml:system/etc/media_codecs_performance.xml \
-                      device/qcom/msm8916_32/media/media_codecs_performance_8929.xml:system/etc/media_codecs_performance_8929.xml \
-                      device/qcom/msm8916_32/media/media_codecs_8939.xml:system/etc/media_codecs_8939.xml \
-                      device/qcom/msm8916_32/media/media_codecs_performance_8916_64_8939.xml:system/etc/media_codecs_performance_8939.xml \
-                      device/qcom/msm8916_32/media/media_codecs_8929.xml:system/etc/media_codecs_8929.xml
-endif
-
 TARGET_USES_NQ_NFC := false
 
 PRODUCT_PROPERTY_OVERRIDES += \
            dalvik.vm.heapgrowthlimit=128m
 
-$(call inherit-product, device/qcom/common/common64.mk)
-
-# When can normal compile this module,  need module owner enable below commands
-# font rendering engine feature switch
--include $(QCPATH)/common/config/rendering-engine.mk
-ifneq (,$(strip $(wildcard $(PRODUCT_RENDERING_ENGINE_REVLIB))))
-     MULTI_LANG_ENGINE := REVERIE
-#    MULTI_LANG_ZAWGYI := REVERIE
-endif
+$(call inherit-product, device/qcom/msm8916-common/msm8916.mk)
 
 
 PRODUCT_BOOT_JARS += qcom.fmradio
-
-#PRODUCT_BOOT_JARS += vcard
-PRODUCT_BOOT_JARS += tcmiface
-#PRODUCT_BOOT_JARS += qcmediaplayer
-
-# QTI extended functionality of android telephony.
-# Required for MSIM manual provisioning and other related features.
-PRODUCT_PACKAGES += telephony-ext
-PRODUCT_BOOT_JARS += telephony-ext
-
-ifneq ($(strip $(QCPATH)),)
-#PRODUCT_BOOT_JARS += com.qti.dpmframework
-#PRODUCT_BOOT_JARS += dpmapi
-PRODUCT_BOOT_JARS += oem-services
-#PRODUCT_BOOT_JARS += com.qti.location.sdk
-endif
-
-#PRODUCT_BOOT_JARS += WfdCommon
-
-#Android EGL implementation
-PRODUCT_PACKAGES += libGLES_android
 
 
 PRODUCT_PACKAGES += \
@@ -108,12 +67,6 @@ PRODUCT_COPY_FILES += \
     device/asus/Z010D/keylayout/focal-touchscreen.kl:system/usr/keylayout/focal-touchscreen.kl \
     device/asus/Z010D/keylayout/focal-touchscreen.idc:system/usr/idc/focal-touchscreen.kl
 
-#ANT+ stack
-PRODUCT_PACKAGES += \
-    AntHalService \
-    libantradio \
-    antradio_app
-
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     persist.sys.usb.config=mtp,adb \
     camera2.portability.force_api=1
@@ -129,26 +82,9 @@ PRODUCT_COPY_FILES += \
 
 # Wifi
 PRODUCT_COPY_FILES += \
-    vendor/qcom/opensource/wlan/prima/firmware_bin/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
-    vendor/qcom/opensource/wlan/prima/firmware_bin/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini \
+    kernel/asus/msm8916/drivers/staging/prima/firmware_bin/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
+    kernel/asus/msm8916/drivers/staging/prima/firmware_bin/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini \
     device/asus/Z010D/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
-
-
-# Defined the locales
-PRODUCT_LOCALES += th_TH vi_VN tl_PH hi_IN ar_EG ru_RU tr_TR pt_BR bn_IN mr_IN ta_IN te_IN zh_HK \
-        in_ID my_MM km_KH sw_KE uk_UA pl_PL sr_RS sl_SI fa_IR kn_IN ml_IN ur_IN gu_IN or_IN
-
-# When can normal compile this module,  need module owner enable below commands
-# Add the overlay path
-#PRODUCT_PACKAGE_OVERLAYS := $(QCPATH)/qrdplus/Extension/res \
-#        $(PRODUCT_PACKAGE_OVERLAYS)
-
-PRODUCT_PACKAGE_OVERLAYS := $(QCPATH)/qrdplus/Extension/res \
-        $(PRODUCT_PACKAGE_OVERLAYS)
-        #$(QCPATH)/qrdplus/globalization/multi-language/res-overlay \
-
-#PRODUCT_SUPPORTS_VERITY := true
-#PRODUCT_SYSTEM_VERITY_PARTITION := /dev/block/bootdevice/by-name/system
 
 # Sensor HAL conf file
 PRODUCT_COPY_FILES += \

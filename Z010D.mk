@@ -1,5 +1,5 @@
 # Inherit from device specific
-$(call inherit-product, device/asus/Z010D/msm8916_64.mk)
+$(call inherit-product, device/asus/Z010D/device.mk)
 
 PRODUCT_NAME := Z010D
 PRODUCT_DEVICE := Z010D
@@ -8,6 +8,3 @@ PRODUCT_MODEL := ASUS_Z010D
 PRODUCT_MANUFACTURER := asus
 BUILD_PRODUCT := ZC550KL
 
-PRODUCT_BUILD_PROP_OVERRIDES += \
-    BUILD_FINGERPRINT="asus/WW_Phone/ASUS_Z010:6.0.1/MMB29P/13.8.26.46-20160812:user/release-keys" \
-    PRIVATE_BUILD_DESC="WW_Phone-user 6.0.1 MMB29P 13.8.26.46-20160812 release-keys"
