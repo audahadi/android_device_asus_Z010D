@@ -134,7 +134,7 @@ TARGET_PER_MGR_ENABLED := true
 TARGET_TAP_TO_WAKE_NODE := "/sys/bus/i2c/devices/i2c-5/5-0038/dclick_mode"
 
 WITH_DEXPREOPT := false
-#ifneq ($(TARGET_BUILD_VARIANT),user)
+ifneq ($(TARGET_BUILD_VARIANT),user)
   # Retain classes.dex in APK's for non-user builds
-#  DEX_PREOPT_DEFAULT := nostripping
-#endif
+  DEX_PREOPT_DEFAULT := nostripping
+endif
