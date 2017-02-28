@@ -101,6 +101,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 PRODUCT_PACKAGES += wcnss_service
 
+PRODUCT_PACKAGES += \
+    wpa_supplicant_overlay.conf \
+		p2p_supplicant_overlay.conf
+
 # MSM IRQ Balancer configuration file
 PRODUCT_COPY_FILES += \
     device/asus/Z010D/msm_irqbalance.conf:system/vendor/etc/msm_irqbalance.conf
