@@ -30,12 +30,9 @@
 import init.carrier.rc
 
 on early-init
-    mkdir /firmware 0771 system system
-    mkdir /system 0777 root root
-    symlink /data/tombstones /tombstones
 
-    mkdir /Removable 0755 media_rw media_rw
-    mount tmpfs tmpfs /Removable mode=0755,gid=1000
+# Turn off backlight on blank
+    write /sys/class/leds/lcd-backlight/trigger "backlight"
 
 on post-fs
     export LD_PRELOAD libNimsWrap.so
@@ -71,45 +68,6 @@ on fs
     wait /dev/block/bootdevice/by-name/modem
     mount vfat /dev/block/bootdevice/by-name/modem /firmware ro context=u:object_r:firmware_file:s0,shortname=lower,uid=1000,gid=1000,dmask=227,fmask=337
     write /sys/kernel/boot_adsp/boot 1
-
-    #+++ ASUS_BSP : add for user unlock
-    wait /dev/block/mmcblk0p20
-    chown root system /dev/block/mmcblk0p20
-    chmod 660 /dev/block/mmcblk0p20
-    #--- ASUS_BSP : add for user unlock
-
-    # +++ ASUS_BSP : add for asus boot animation partition
-    # mount ADF
-    wait /dev/block/bootdevice/by-name/ADF
-    mount ext4 /dev/block/bootdevice/by-name/ADF /ADF nosuid nodev barrier=1 data=ordered
-    chmod 0775 /ADF
-    chmod 0775 /ADF/boot
-    chown system system /ADF
-    restorecon_recursive /ADF
-
-    wait /dev/block/bootdevice/by-name/APD
-    mount ext4 /dev/block/bootdevice/by-name/APD /APD nosuid nodev barrier=1 data=ordered
-    chmod 0775 /APD
-    chown system system /APD
-    restorecon_recursive /APD
-    # --- ASUS_BSP : add for asus boot animation partition
-
-    # Freeman add for GTS  +++
-    chmod 0660 /dev/block/bootdevice/by-name/persistent
-    chown system system /dev/block/bootdevice/by-name/persistent
-    chmod 0660 /dev/block/mmcblk0p24
-    chown system system /dev/block/mmcblk0p24
-    # Freeman add for GTS  ---
-
-    # mount asusfw
-    wait /dev/block/bootdevice/by-name/asusfw
-    exec /system/bin/e2fsck -p /dev/block/bootdevice/by-name/asusfw
-    mount ext4 /dev/block/bootdevice/by-name/asusfw /asusfw nosuid nodev barrier=1 noauto_da_alloc
-    restorecon_recursive /asusfw
-    chmod 0775 /asusfw
-    chown system system /asusfw
-
-    start FWAuto
 
 on post-fs-data
     mkdir /data/tombstones 0771 system system
@@ -264,18 +222,10 @@ on property:persist.usb.chgdisabled=1
 on property:persist.usb.chgdisabled=0
     write /sys/class/power_supply/battery/charging_enabled 1
 
-on property:sys.boot_completed=1
-   start qrngp
-
 service qseecomd /system/bin/qseecomd
    class core
    user root
    group root
-
-#service aostlmd /system/bin/aostlmd
-#   class late_start
-#   user system
-#   group system net_raw
 
 service perfd /system/vendor/bin/perfd
    class main
@@ -303,6 +253,7 @@ service audiod /system/bin/audiod
 on boot
     start rmt_storage
     insmod /system/lib/modules/adsprpc.ko
+
 # access permission for secure touch
     chmod 0660 /sys/devices/soc.0/78b9000.i2c/i2c-5/5-0020/secure_touch_enable
     chmod 0440 /sys/devices/soc.0/78b9000.i2c/i2c-5/5-0020/secure_touch
@@ -312,6 +263,24 @@ on boot
     chown system drmrpc /sys/devices/soc.0/78b9000.i2c/i2c-5/5-0020/secure_touch
     chown system drmrpc /sys/devices/soc.0/78b9000.i2c/i2c-5/5-0070/secure_touch_enable
     chown system drmrpc /sys/devices/soc.0/78b9000.i2c/i2c-5/5-0070/secure_touch
+
+# Permissions for touchscreen
+    chown system system /sys/bus/i2c/devices/i2c-5/5-0038/glove_mode
+    chmod 0664 /sys/bus/i2c/devices/i2c-5/5-0038/glove_mode
+    chown system radio /sys/bus/i2c/devices/i2c-5/5-0038/dclick_mode
+    chmod 0664 /sys/bus/i2c/devices/i2c-5/5-0038/dclick_mode
+    chown system system /sys/bus/i2c/devices/i2c-5/5-0038/gesture_mode
+    chmod 0664 /sys/bus/i2c/devices/i2c-5/5-0038/gesture_mode
+    chown system system /sys/bus/i2c/devices/i2c-5/5-0038/keypad_mode
+    chmod 0664 /sys/bus/i2c/devices/i2c-5/5-0038/keypad_mode
+    chown system system /proc/asus_touch_proximity_status
+
+# Leds
+    chown system system /sys/class/leds/green/pwm_us
+    chown system system /sys/class/leds/red/pwm_us
+
+    chown system system /dev/lightsensor
+    chmod 0660 /dev/lightsenso
 
 service wcnss-service /system/bin/wcnss_service
     class main

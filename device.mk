@@ -8,7 +8,6 @@ DEVICE_PACKAGE_OVERLAYS := device/asus/Z010D/overlay
 
 # Ramdisk
 PRODUCT_PACKAGES += \
-    init.asus.rc \
     init.target.rc
 
 PRODUCT_AAPT_CONFIG := normal hdpi xhdpi
