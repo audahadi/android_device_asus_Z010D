@@ -1,5 +1,5 @@
 #
-# system.prop for msm8916
+# system.prop for Z010D
 #
 
 rild.libpath=/vendor/lib64/libril-qc-qmi-1.so
@@ -20,7 +20,7 @@ persist.radio.multisim.config=dsds
 #
 # Set network mode to (T/L/G/W/1X/EVDO, G) for DSDS mode
 #
-ro.telephony.default_network=22,1
+ro.telephony.default_network=22,22
 
 debug.sf.hw=0
 debug.egl.hw=0
@@ -185,6 +185,4 @@ wifi.interface=wlan0
 ro.sf.lcd_density=320
 persist.radio.add_power_save=1
 persist.radio.dont_use_dsd=true
-ro.build.csc.version=WW_ZC550KL-13.8.26.46-20160812
 ro.asus.persistent=/dev/block/platform/7824900.sdhci/by-name/persistent
-

@@ -1,14 +1,13 @@
 TARGET_USES_QCOM_BSP := true
 # Add QC Video Enhancements flag
 TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
-BOARD_USES_LIBC_WRAPPER := true
-TARGET_USE_VENDOR_CAMERA_EXT := true
 
 DEVICE_PACKAGE_OVERLAYS := device/asus/Z010D/overlay
 
 # Ramdisk
 PRODUCT_PACKAGES += \
-    init.target.rc
+    init.target.rc \
+		ueventd.asus.rc
 
 PRODUCT_AAPT_CONFIG := normal hdpi xhdpi
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
@@ -34,29 +33,10 @@ PRODUCT_BOOT_JARS += qcom.fmradio
 PRODUCT_BOOT_JARS += tcmiface
 PRODUCT_BOOT_JARS += telephony-ext
 
-PRODUCT_PACKAGES += \
-    libqcomvisualizer \
-    libqcompostprocbundle \
-    libqcomvoiceprocessing
-
 # Audio configuration file
 PRODUCT_COPY_FILES += \
-    device/asus/Z010D/audio/aanc_tuning_mixer.txt:system/etc/aanc_tuning_mixer.txt \
-    device/asus/Z010D/audio/audio_effects.conf:system/etc/audio_effects.conf \
-    device/asus/Z010D/audio/audio_policy.conf:system/etc/audio_policy.conf \
     device/asus/Z010D/audio/mixer_paths.xml:system/etc/mixer_paths.xml \
-    device/asus/Z010D/audio/mixer_paths_mtp.xml:system/etc/mixer_paths_mtp.xml \
-    device/asus/Z010D/audio/mixer_paths_mtp_EU.xml:system/etc/mixer_paths_mtp_EU.xml \
-    device/asus/Z010D/audio/mixer_paths_qrd_skuh.xml:system/etc/mixer_paths_qrd_skuh.xml \
-    device/asus/Z010D/audio/mixer_paths_qrd_skuhf.xml:system/etc/mixer_paths_qrd_skuhf.xml \
-    device/asus/Z010D/audio/mixer_paths_qrd_skui.xml:system/etc/mixer_paths_qrd_skui.xml \
-    device/asus/Z010D/audio/mixer_paths_sbc.xml:system/etc/mixer_paths_sbc.xml \
-    device/asus/Z010D/audio/mixer_paths_skuk.xml:system/etc/mixer_paths_skuk.xml \
-    device/asus/Z010D/audio/mixer_paths_skul.xml:system/etc/mixer_paths_skul.xml \
-    device/asus/Z010D/audio/mixer_paths_wcd9306.xml:system/etc/mixer_paths_wcd9306.xml \
-    device/asus/Z010D/audio/sound_trigger_mixer_paths.xml:system/etc/sound_trigger_mixer_paths.xml \
-    device/asus/Z010D/audio/sound_trigger_mixer_paths_wcd9306.xml:system/etc/sound_trigger_mixer_paths_wcd9306.xml \
-    device/asus/Z010D/audio/sound_trigger_platform_info.xml:system/etc/sound_trigger_platform_info.xml
+    device/asus/Z010D/audio/mixer_paths_mtp.xml:system/etc/mixer_paths_mtp.xml
 
 # acdbdata
 PRODUCT_COPY_FILES += \
@@ -92,6 +72,9 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/asus/Z010D/keylayout/focal-touchscreen.kl:system/usr/keylayout/focal-touchscreen.kl \
     device/asus/Z010D/keylayout/focal-touchscreen.idc:system/usr/idc/focal-touchscreen.kl
+
+PRODUCT_PACKAGES += \
+    camera.msm8916
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     camera2.portability.force_api=1
