@@ -7,7 +7,7 @@ DEVICE_PACKAGE_OVERLAYS := device/asus/Z010D/overlay
 # Ramdisk
 PRODUCT_PACKAGES += \
     init.target.rc \
-		ueventd.asus.rc
+		ueventd.device.rc
 
 PRODUCT_AAPT_CONFIG := normal hdpi xhdpi
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
@@ -101,10 +101,6 @@ PRODUCT_COPY_FILES += \
 # Sensor HAL conf file
 PRODUCT_COPY_FILES += \
     device/asus/Z010D/sensors/hals.conf:system/etc/sensors/hals.conf
-
-PRODUCT_COPY_FILES += \
-    device/asus/Z010D/btwifimac.sh:system/etc/btwifimac.sh \
-    device/asus/Z010D/rootdir/etc/sensor_init.sh:system/etc/sensor_init.sh
 
 GMS_ENABLE_OPTIONAL_MODULES := false
 
