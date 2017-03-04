@@ -74,11 +74,15 @@ PRODUCT_COPY_FILES += \
 # Camera
 PRODUCT_PACKAGES += \
     camera.msm8916 \
-		libshims_camera
+    libshims_camera
 
 # DRM
 PRODUCT_PACKAGES += \
      libshims_wvm
+
+# light
+PRODUCT_PACKAGES += \
+    lights.msm8916
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     camera2.portability.force_api=1

@@ -135,6 +135,9 @@ TARGET_PER_MGR_ENABLED := true
 # Tap-to-Wake
 TARGET_TAP_TO_WAKE_NODE := "/sys/bus/i2c/devices/i2c-5/5-0038/dclick_mode"
 
+# Lights
+TARGET_PROVIDES_LIBLIGHT := true
+
 WITH_DEXPREOPT := false
 ifneq ($(TARGET_BUILD_VARIANT),user)
   # Retain classes.dex in APK's for non-user builds
