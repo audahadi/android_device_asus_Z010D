@@ -112,8 +112,7 @@ MAX_VIRTUAL_DISPLAY_DIMENSION := 2048
 BOARD_EGL_CFG := device/asus/Z010D/egl.cfg
 TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
 
-TARGET_INIT_VENDOR_LIB := libinit_z010d
-#TARGET_LIBINIT_DEFINES_FILE := init_z010d
+TARGET_LIBINIT_MSM8916_DEFINES_FILE := init_z010d
 
 #add suffix variable to uniquely identify the board
 TARGET_BOARD_SUFFIX := _64

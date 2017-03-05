@@ -27,12 +27,29 @@
 #
 #
 
-import init.carrier.rc
-
 on early-init
+    mkdir /Removable 0755 media_rw media_rw
+    mount tmpfs tmpfs /Removable mode=0755,gid=1000
 
-# Turn off backlight on blank
-    write /sys/class/leds/lcd-backlight/trigger "backlight"
+on init
+   export LD_SHIM_LIBS /system/vendor/lib64/lib-imscamera.so|libshims_camera.so:/system/vendor/lib/libwvm.so|libshims_wvm.so
+
+   write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
+
+    mkdir /asdf 0755 system system
+    mkdir /factory 0775 system system
+
+    mkdir /mnt/media_rw/sdcard1 0700 media_rw media_rw
+    mkdir /mnt/media_rw/usbotg 0700 media_rw media_rw
+    mkdir /mnt/media_rw/uicc0 0700 media_rw media_rw
+    mkdir /mnt/media_rw/uicc1 0700 media_rw media_rw
+    mkdir /storage/sdcard1 0700 root root
+    mkdir /storage/uicc0 0700 root root
+    mkdir /storage/uicc1 0700 root root
+    mkdir /storage/usbotg 0700 root root
+
+    export EXTERNAL_STORAGE /sdcard
+    export SECONDARY_STORAGE /storage/sdcard1
 
 on post-fs
     export LD_PRELOAD libNimsWrap.so
@@ -69,6 +86,9 @@ on fs
     mount vfat /dev/block/bootdevice/by-name/modem /firmware ro context=u:object_r:firmware_file:s0,shortname=lower,uid=1000,gid=1000,dmask=227,fmask=337
     write /sys/kernel/boot_adsp/boot 1
 
+    restorecon_recursive /asdf
+    restorecon_recursive /factory
+
 on post-fs-data
     mkdir /data/tombstones 0771 system system
     mkdir /tombstones/modem 0771 system system
@@ -83,40 +103,44 @@ on post-fs-data
     chown system system /sys/afe_properties/hallib_name
     chown system system /sys/afe_properties/wake_up_enable
 
-    # mount factory
-    wait /dev/block/bootdevice/by-name/factory
-    exec /system/bin/e2fsck -p /dev/block/bootdevice/by-name/factory
-    mount ext4 /dev/block/bootdevice/by-name/factory /factory ro nosuid nodev barrier=1 noauto_da_alloc
-    restorecon_recursive /factory
+    # Mounting of persist, asdf and factory is moved to 'on emmc-fs' and 'on fs' sections
+    # We chown/chmod them again so because mount is run as root + defaults
+    chown system system /asdf
+    chmod 0775 /asdf
+    chown system system /factory
     chmod 0775 /factory
-    chown root shell /factory
 
-    start CheckProp
+on boot
+    start rmt_storage
+    insmod /system/lib/modules/adsprpc.ko
 
-    # mount asdf
-    wait /dev/block/bootdevice/by-name/asdf
-    exec /system/bin/e2fsck -p /dev/block/bootdevice/by-name/asdf
-    mount ext4 /dev/block/bootdevice/by-name/asdf /asdf nosuid nodev barrier=1
-    chmod 0777 /asdf
-    restorecon_recursive /asdf
-    start check_last
-    # mount factory
-    wait /dev/block/bootdevice/by-name/factory
-    exec /system/bin/e2fsck -p /dev/block/bootdevice/by-name/factory
-    mount ext4 /dev/block/bootdevice/by-name/factory /factory ro nosuid nodev barrier=1 noauto_da_alloc
-    restorecon_recursive /factory
-    chmod 0775 /factory
-    chown root shell /factory
+# access permission for secure touch
+    chmod 0660 /sys/devices/soc.0/78b9000.i2c/i2c-5/5-0020/secure_touch_enable
+    chmod 0440 /sys/devices/soc.0/78b9000.i2c/i2c-5/5-0020/secure_touch
+    chmod 0660 /sys/devices/soc.0/78b9000.i2c/i2c-5/5-0070/secure_touch_enable
+    chmod 0440 /sys/devices/soc.0/78b9000.i2c/i2c-5/5-0070/secure_touch
+    chown system drmrpc /sys/devices/soc.0/78b9000.i2c/i2c-5/5-0020/secure_touch_enable
+    chown system drmrpc /sys/devices/soc.0/78b9000.i2c/i2c-5/5-0020/secure_touch
+    chown system drmrpc /sys/devices/soc.0/78b9000.i2c/i2c-5/5-0070/secure_touch_enable
+    chown system drmrpc /sys/devices/soc.0/78b9000.i2c/i2c-5/5-0070/secure_touch
 
-    start CheckProp
+# Permissions for touchscreen
+    chown system system /sys/bus/i2c/devices/i2c-5/5-0038/glove_mode
+    chmod 0664 /sys/bus/i2c/devices/i2c-5/5-0038/glove_mode
+    chown system radio /sys/bus/i2c/devices/i2c-5/5-0038/dclick_mode
+    chmod 0664 /sys/bus/i2c/devices/i2c-5/5-0038/dclick_mode
+    chown system system /sys/bus/i2c/devices/i2c-5/5-0038/gesture_mode
+    chmod 0664 /sys/bus/i2c/devices/i2c-5/5-0038/gesture_mode
+    chown system system /sys/bus/i2c/devices/i2c-5/5-0038/keypad_mode
+    chmod 0664 /sys/bus/i2c/devices/i2c-5/5-0038/keypad_mode
+    chown system system /proc/asus_touch_proximity_status
 
-    # mount asdf
-    wait /dev/block/bootdevice/by-name/asdf
-    exec /system/bin/e2fsck -p /dev/block/bootdevice/by-name/asdf
-    mount ext4 /dev/block/bootdevice/by-name/asdf /asdf nosuid nodev barrier=1
-    chmod 0777 /asdf
-    restorecon_recursive /asdf
-    start check_last
+# Leds
+    chown system system /sys/class/leds/green/pwm_us
+    chown system system /sys/class/leds/red/pwm_us
+
+    chown system system /dev/lightsensor
+    chmod 0660 /dev/lightsenso
 
     chown system system /sys/class/leds/red/on_ms
     chmod 0664 /sys/class/leds/red/on_ms
@@ -126,6 +150,15 @@ on post-fs-data
     chmod 0664 /sys/class/leds/red/off_ms
     chown system system /sys/class/leds/green/off_ms
     chmod 0664 /sys/class/leds/green/off_ms
+
+    chown system shell /sys/devices/virtual/sensors/psensor/switch
+    chown system shell /sys/devices/virtual/sensors/lsensor/switch
+    chown system shell /sys/devices/virtual/sensors/psensor/hi_cal
+    chown system shell /sys/devices/virtual/sensors/psensor/low_cal
+    chown system shell /sys/devices/virtual/sensors/psensor/proxm
+    chown system shell /sys/devices/virtual/sensors/lsensor/200lux_cal
+    chown system shell /sys/devices/virtual/sensors/lsensor/1000lux_cal
+    chown system shell /sys/devices/virtual/sensors/lsensor/adc
 
     chown system system /sys/class/leds/lcd-backlight/brightness
     chmod 0664 /sys/class/leds/lcd-backlight/brightness
@@ -202,161 +235,8 @@ on post-fs-data
     chmod 0774 /sys/bus/i2c/devices/0-000f/Gsensor_raw
     chmod 0774 /sys/bus/i2c/devices/0-000f/Gsensor_status
 
-#start camera server as daemon
-service qcamerasvr /system/bin/mm-qcamera-daemon
-    class late_start
-    user camera
-    group camera system inet input graphics
+on property:sys.usb_uicc.enabled=1
+    start usb_uicc_enable
 
-on init
-   export LD_SHIM_LIBS /system/vendor/lib64/lib-imscamera.so|libshims_camera.so:/system/vendor/lib/libwvm.so|libshims_wvm.so
-
-   write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
-
-# Allow usb charging to be disabled peristently
-on property:persist.usb.chgdisabled=1
-    write /sys/class/power_supply/battery/charging_enabled 0
-
-on property:persist.usb.chgdisabled=0
-    write /sys/class/power_supply/battery/charging_enabled 1
-
-service qseecomd /system/bin/qseecomd
-   class core
-   user root
-   group root
-
-service perfd /system/vendor/bin/perfd
-   class main
-   user root
-   disabled
-
-service thermal-engine /system/vendor/bin/thermal-engine
-   class main
-   user root
-   socket thermal-send-client stream 0666 system system
-   socket thermal-recv-client stream 0660 system system
-   socket thermal-recv-passive-client stream 0666 system system
-   group root
-
-service time_daemon /system/bin/time_daemon
-   class late_start
-   user root
-   group root
-
-service audiod /system/bin/audiod
-   class late_start
-   user system
-   group system
-
-on boot
-    start rmt_storage
-    insmod /system/lib/modules/adsprpc.ko
-
-# access permission for secure touch
-    chmod 0660 /sys/devices/soc.0/78b9000.i2c/i2c-5/5-0020/secure_touch_enable
-    chmod 0440 /sys/devices/soc.0/78b9000.i2c/i2c-5/5-0020/secure_touch
-    chmod 0660 /sys/devices/soc.0/78b9000.i2c/i2c-5/5-0070/secure_touch_enable
-    chmod 0440 /sys/devices/soc.0/78b9000.i2c/i2c-5/5-0070/secure_touch
-    chown system drmrpc /sys/devices/soc.0/78b9000.i2c/i2c-5/5-0020/secure_touch_enable
-    chown system drmrpc /sys/devices/soc.0/78b9000.i2c/i2c-5/5-0020/secure_touch
-    chown system drmrpc /sys/devices/soc.0/78b9000.i2c/i2c-5/5-0070/secure_touch_enable
-    chown system drmrpc /sys/devices/soc.0/78b9000.i2c/i2c-5/5-0070/secure_touch
-
-# Permissions for touchscreen
-    chown system system /sys/bus/i2c/devices/i2c-5/5-0038/glove_mode
-    chmod 0664 /sys/bus/i2c/devices/i2c-5/5-0038/glove_mode
-    chown system radio /sys/bus/i2c/devices/i2c-5/5-0038/dclick_mode
-    chmod 0664 /sys/bus/i2c/devices/i2c-5/5-0038/dclick_mode
-    chown system system /sys/bus/i2c/devices/i2c-5/5-0038/gesture_mode
-    chmod 0664 /sys/bus/i2c/devices/i2c-5/5-0038/gesture_mode
-    chown system system /sys/bus/i2c/devices/i2c-5/5-0038/keypad_mode
-    chmod 0664 /sys/bus/i2c/devices/i2c-5/5-0038/keypad_mode
-    chown system system /proc/asus_touch_proximity_status
-
-# Leds
-    chown system system /sys/class/leds/green/pwm_us
-    chown system system /sys/class/leds/red/pwm_us
-
-    chown system system /dev/lightsensor
-    chmod 0660 /dev/lightsenso
-
-service wcnss-service /system/bin/wcnss_service
-    class main
-    user system
-    group system wifi radio
-    oneshot
-
-service imsqmidaemon /system/bin/imsqmidaemon
-    class main
-    user system
-    socket ims_qmid stream 0660 system radio
-    group radio log qcom_diag
-
-service imsdatadaemon /system/bin/imsdatadaemon
-    class main
-    user system
-    socket ims_datad stream 0660 system radio
-    group system wifi radio inet log qcom_diag
-    disabled
-
-on property:sys.ims.QMI_DAEMON_STATUS=1
-    start imsdatadaemon
-
-service ims_rtp_daemon /system/bin/ims_rtp_daemon
-   class main
-   user system
-   socket ims_rtpd stream 0660 system radio
-   group radio diag qcom_diag log inet
-   disabled
-
-service imscmservice /system/bin/imscmservice
-   class main
-   user system
-   group radio diag inet log
-   disabled
-
-on property:sys.ims.DATA_DAEMON_STATUS=1
-    start ims_rtp_daemon
-    start imscmservice
-
-service ppd /system/bin/mm-pp-daemon
-    class late_start
-    disabled
-    user system
-    socket pps stream 0660 system system
-    group system graphics
-
-on property:init.svc.surfaceflinger=stopped
-    stop ppd
-
-on property:init.svc.surfaceflinger=running
-    start ppd
-
-on charger
-    wait /dev/block/bootdevice/by-name/system
-    mount ext4 /dev/block/bootdevice/by-name/system /system ro barrier=1
-    chown root system /sys/class/power_supply/bms/current_now
-    chown root system /sys/class/power_supply/bms/voltage_ocv
-    chmod 0664 /sys/class/power_supply/bms/current_now
-    chmod 0664 /sys/class/power_supply/bms/voltage_ocv
-    start vm_bms
-    load_all_props
-    start qcom-post-boot
-
-service hbtp /system/vendor/bin/hbtp_daemon
-    class main
-    user root
-    group root
-    disabled
-
-service dts_configurator /system/bin/dts_configurator
-    class main
-    user system
-    group system
-    oneshot
-
-service per_mgr /system/bin/pm-service
-    class core
-    user system
-    group system net_raw
-    group system
+on property:sys.usb_uicc.enabled=0
+    start usb_uicc_enable
