@@ -1,5 +1,6 @@
 /*
-   Copyright (c) 2015, The Linux Foundation. All rights reserved.
+   Copyright (c) 2013, The Linux Foundation. All rights reserved.
+   Copyright (C) 2016 The CyanogenMod Project.
 
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions are
@@ -27,8 +28,10 @@
    IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <sys/sysinfo.h>
+#include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
 
@@ -42,6 +45,14 @@
 
 static char tmp[BUF_SIZE];
 static char buff_tmp[BUF_SIZE];
+
+char const *device;
+char const *family;
+char const *product;
+char const *heapstartsize;
+char const *heapgrowthlimit;
+char const *heapsize;
+char const *heapminfree;
 
 static int read_file2(const char *fname, char *data, int max_size)
 {
@@ -66,11 +77,13 @@ static int read_file2(const char *fname, char *data, int max_size)
     return 1;
 }
 
-
-void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *board_type)
+void vendor_load_properties()
 {
-    int rc;
+
+    char b_description[PROP_VALUE_MAX], b_fingerprint[PROP_VALUE_MAX];
+    char p_carrier[PROP_VALUE_MAX], p_device[PROP_VALUE_MAX], p_model[PROP_VALUE_MAX];
     unsigned long raw_id = -1;
+    int rc;
 
     /* get raw ID */
     rc = read_file2(RAW_ID_PATH, tmp, sizeof(tmp));
@@ -80,15 +93,42 @@ void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *boar
 
     /* Z010D  */
     if (raw_id==1797) {
-        property_set("ro.product.model", "ASUS_Z010D");
-        property_set("ro.product.device", "ASUS_Z010");
-        property_set("ro.product.carrier", "US-ASUS_Z010D-WW_Phone");
-        property_set("ro.build.description", "WW_Phone-user 6.0.1 MMB29P 13.8.26.46-20160812 release-keys");
-        property_set("ro.build.fingerprint", "asus/WW_Phone/ASUS_Z010:6.0.1/MMB29P/13.8.26.46-20160812:user/release-keys");
-        property_set("ro.build.product", "ZC550KL");
-        property_set("ro.build.csc.version", "WW_ZC550KL-13.8.26.46-20160812cccc");
-        property_set("ro.build.product", "ZC550KL");
+
+    /* Device Setting */
+    family = "WW_Phone";
+    device = "Z010D";
+    product = "ZC550KL"; // need for Сamera Hal project ID check
+
+    /* Heap Setting */
+    heapstartsize = "8m";
+    heapgrowthlimit = "192m";
+    heapsize = "512m";
+    heapminfree = "2m";
+
+    sprintf(b_description, "%s-user 6.0.1 MMB29P 13.8.26.46-20160812 release-keys", family);
+    sprintf(b_fingerprint, "asus/%s/ASUS_%s:6.0.1/MMB29P/13.8.26.46-20160812:user/release-keys", family, device);
+    sprintf(p_device, "ASUS_%s", device);
+    sprintf(p_carrier, "US-ASUS_%s-%s", device, family);
+
+    property_set("ro.build.product", product);
+    property_set("ro.build.description", b_description);
+    property_set("ro.build.fingerprint", b_fingerprint);
+    property_set("ro.product.carrier", p_carrier);
+    property_set("ro.product.device", p_device);
+    property_set("ro.product.model", "Zenfone Max");
+    property_set("ro.build.product", "ZC550KL");
+
+    /* Heap Set */
+    property_set("dalvik.vm.heapstartsize", heapstartsize);
+    property_set("dalvik.vm.heapgrowthlimit", heapgrowthlimit);
+    property_set("dalvik.vm.heapsize", heapsize);
+    property_set("dalvik.vm.heaptargetutilization", "0.75");
+    property_set("dalvik.vm.heapminfree", heapminfree);
+    property_set("dalvik.vm.heapmaxfree", "8m");
+
     } else {
-        property_set("ro.product.model", "Zenfone Max"); // this should never happen.
+        property_set("ro.product.model", "Zenfone"); // this should never happen.
     }
+
+    INFO("Setting build properties for %s device of %s family\n", device, family);
 }

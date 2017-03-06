@@ -7,7 +7,7 @@ DEVICE_PACKAGE_OVERLAYS := device/asus/Z010D/overlay
 # Ramdisk
 PRODUCT_PACKAGES += \
     init.target.rc \
-		ueventd.device.rc
+    ueventd.device.rc
 
 PRODUCT_AAPT_CONFIG := normal hdpi xhdpi
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
@@ -17,7 +17,7 @@ PRODUCT_PACKAGES += \
     fs_config_files
 
 # Enable features in video HAL that can compile only on this platform
-# TARGET_USES_MEDIA_EXTENSIONS := true
+TARGET_USES_MEDIA_EXTENSIONS := true
 
 TARGET_USES_NQ_NFC := false
 
@@ -79,10 +79,6 @@ PRODUCT_PACKAGES += \
 # DRM
 PRODUCT_PACKAGES += \
      libshims_wvm
-
-# light
-PRODUCT_PACKAGES += \
-    lights.msm8916
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     camera2.portability.force_api=1

@@ -112,7 +112,8 @@ MAX_VIRTUAL_DISPLAY_DIMENSION := 2048
 BOARD_EGL_CFG := device/asus/Z010D/egl.cfg
 TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
 
-TARGET_LIBINIT_MSM8916_DEFINES_FILE := init_z010d
+TARGET_INIT_VENDOR_LIB := libinit_device
+#TARGET_LIBINIT_MSM8916_DEFINES_FILE := init_device.cpp
 
 #add suffix variable to uniquely identify the board
 TARGET_BOARD_SUFFIX := _64
@@ -133,9 +134,6 @@ TARGET_PER_MGR_ENABLED := true
 
 # Tap-to-Wake
 TARGET_TAP_TO_WAKE_NODE := "/sys/bus/i2c/devices/i2c-5/5-0038/dclick_mode"
-
-# Lights
-TARGET_PROVIDES_LIBLIGHT := true
 
 WITH_DEXPREOPT := false
 ifneq ($(TARGET_BUILD_VARIANT),user)
