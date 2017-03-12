@@ -111,9 +111,6 @@ void vendor_load_properties()
     sprintf(p_carrier, "US-ASUS_%s-%s", device, family);
 
     property_set("ro.build.product", product);
-    property_set("ro.build.description", b_description);
-    property_set("ro.build.fingerprint", b_fingerprint);
-    property_set("ro.product.carrier", p_carrier);
     property_set("ro.product.device", p_device);
     property_set("ro.product.model", "Zenfone Max");
     property_set("ro.build.product", "ZC550KL");
