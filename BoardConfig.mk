@@ -80,10 +80,6 @@ WPA_SUPPLICANT_VERSION := VER_0_8_X
 #TARGET_USES_QCOM_WCNSS_QMI := true
 
 # Workaround framework bluetooth dependency
-BOARD_HAVE_BLUETOOTH := true
-BOARD_HAVE_BLUETOOTH_QCOM := true
-QCOM_BT_USE_SMD_TTY := true
-BLUETOOTH_HCI_USE_MCT := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/qcom/msm8916-common/configs
 
 # Added to indicate that protobuf-c is supported in this build
@@ -127,6 +123,10 @@ TARGET_HW_DISK_ENCRYPTION := true
 TARGET_SWV8_DISK_ENCRYPTION := true
 
 FEATURE_QCRIL_UIM_SAP_SERVER_MODE := true
+
+# gps
+BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := default
+BOARD_VENDOR_QCOM_LOC_PDK_FEATURE_SET := false
 
 # Control flag between KM versions
 TARGET_HW_KEYMASTER_V03 := true

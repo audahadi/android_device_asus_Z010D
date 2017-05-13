@@ -1,6 +1,9 @@
 TARGET_USES_QCOM_BSP := true
+
 # Add QC Video Enhancements flag
 TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
+
+TARGET_USES_AOSP := true
 
 DEVICE_PACKAGE_OVERLAYS := device/asus/Z010D/overlay
 
@@ -33,10 +36,21 @@ PRODUCT_BOOT_JARS += qcom.fmradio
 PRODUCT_BOOT_JARS += tcmiface
 PRODUCT_BOOT_JARS += telephony-ext
 
+# Audio configuration
+PRODUCT_COPY_FILES += \
+    device/asus/Z010D/audio/audio_policy_configuration.xml:system/etc/audio_policy_configuration.xml \
+    device/asus/Z010D/audio/aanc_tuning_mixer.txt:system/etc/aanc_tuning_mixer.txt \
+    device/asus/Z010D/audio/audio_platform_info.xml:system/etc/audio_platform_info.xml
+
 # Audio configuration file
 PRODUCT_COPY_FILES += \
     device/asus/Z010D/audio/mixer_paths.xml:system/etc/mixer_paths.xml \
     device/asus/Z010D/audio/mixer_paths_mtp.xml:system/etc/mixer_paths_mtp.xml
+
+# Voice recognition
+PRODUCT_COPY_FILES += \
+    device/asus/Z010D/audio/sound_trigger_mixer_paths.xml:system/etc/sound_trigger_mixer_paths.xml \
+    device/asus/Z010D/audio/sound_trigger_platform_info.xml:system/etc/sound_trigger_platform_info.xml
 
 # acdbdata
 PRODUCT_COPY_FILES += \
@@ -69,7 +83,7 @@ PRODUCT_COPY_FILES += \
 # Keylayout
 PRODUCT_COPY_FILES += \
     device/asus/Z010D/keylayout/focal-touchscreen.kl:system/usr/keylayout/focal-touchscreen.kl \
-    device/asus/Z010D/keylayout/focal-touchscreen.idc:system/usr/idc/focal-touchscreen.kl
+    device/asus/Z010D/keylayout/focal-touchscreen.idc:system/usr/idc/focal-touchscreen.idc
 
 # Camera
 PRODUCT_PACKAGES += \
@@ -92,19 +106,14 @@ PRODUCT_PACKAGES += \
     wpa_supplicant_overlay.conf \
 		p2p_supplicant_overlay.conf
 
-# MSM IRQ Balancer configuration file
-PRODUCT_COPY_FILES += \
-    device/asus/Z010D/msm_irqbalance.conf:system/vendor/etc/msm_irqbalance.conf
-
 # Wifi
 PRODUCT_COPY_FILES += \
     kernel/asus/msm8916/drivers/staging/prima/firmware_bin/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
     kernel/asus/msm8916/drivers/staging/prima/firmware_bin/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini \
     device/asus/Z010D/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
 
-# Sensor HAL conf file
-PRODUCT_COPY_FILES += \
-    device/asus/Z010D/sensors/hals.conf:system/etc/sensors/hals.conf
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.frp.pst=/dev/block/bootdevice/by-name/persistent
 
 GMS_ENABLE_OPTIONAL_MODULES := false
 
