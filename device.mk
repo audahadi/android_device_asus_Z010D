@@ -1,16 +1,20 @@
+# call the proprietary setup
+$(call inherit-product-if-exists, vendor/asus/Z010D/Z010D-vendor.mk)
+
+$(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
+
+DEVICE_PACKAGE_OVERLAYS := device/asus/Z010D/overlay
+
+$(call inherit-product, device/qcom/msm8916-common/msm8916.mk)
+
 TARGET_USES_QCOM_BSP := true
 
 # Add QC Video Enhancements flag
 TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
 
-TARGET_USES_AOSP := true
-
-DEVICE_PACKAGE_OVERLAYS := device/asus/Z010D/overlay
-
 # Ramdisk
 PRODUCT_PACKAGES += \
-    init.target.rc \
-    ueventd.device.rc
+    init.target.rc
 
 PRODUCT_AAPT_CONFIG := normal hdpi xhdpi
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
@@ -27,8 +31,6 @@ TARGET_USES_NQ_NFC := false
 PRODUCT_PROPERTY_OVERRIDES += \
            dalvik.vm.heapgrowthlimit=128m
 
-$(call inherit-product, device/qcom/msm8916-common/msm8916.mk)
-
 PRODUCT_PACKAGES += telephony-ext
 PRODUCT_PACKAGES += libGLES_android
 
@@ -44,7 +46,6 @@ PRODUCT_COPY_FILES += \
 
 # Audio configuration file
 PRODUCT_COPY_FILES += \
-    device/asus/Z010D/audio/mixer_paths.xml:system/etc/mixer_paths.xml \
     device/asus/Z010D/audio/mixer_paths_mtp.xml:system/etc/mixer_paths_mtp.xml
 
 # Voice recognition
@@ -97,14 +98,11 @@ PRODUCT_PACKAGES += \
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     camera2.portability.force_api=1
 
-PRODUCT_PROPERTY_OVERRIDES += \
-    qemu.hw.mainkeys=0
-
 PRODUCT_PACKAGES += wcnss_service
 
 PRODUCT_PACKAGES += \
     wpa_supplicant_overlay.conf \
-		p2p_supplicant_overlay.conf
+    p2p_supplicant_overlay.conf
 
 # Wifi
 PRODUCT_COPY_FILES += \
@@ -117,7 +115,3 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 GMS_ENABLE_OPTIONAL_MODULES := false
 
-# call the proprietary setup
-$(call inherit-product-if-exists, vendor/asus/Z010D/Z010D-vendor.mk)
-
-$(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)

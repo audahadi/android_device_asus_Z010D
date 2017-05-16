@@ -27,104 +27,9 @@
 #
 #
 
-on early-init
-    mkdir /Removable 0755 media_rw media_rw
-    mount tmpfs tmpfs /Removable mode=0755,gid=1000
-
-on init
-   export LD_SHIM_LIBS /system/vendor/lib64/lib-imscamera.so|libshims_camera.so:/system/vendor/lib/libwvm.so|libshims_wvm.so
-
-   write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
-
-    mkdir /asdf 0755 system system
-    mkdir /factory 0775 system system
-
-    mkdir /mnt/media_rw/sdcard1 0700 media_rw media_rw
-    mkdir /mnt/media_rw/usbotg 0700 media_rw media_rw
-    mkdir /mnt/media_rw/uicc0 0700 media_rw media_rw
-    mkdir /mnt/media_rw/uicc1 0700 media_rw media_rw
-    mkdir /storage/sdcard1 0700 root root
-    mkdir /storage/uicc0 0700 root root
-    mkdir /storage/uicc1 0700 root root
-    mkdir /storage/usbotg 0700 root root
-
-    export EXTERNAL_STORAGE /sdcard
-    export SECONDARY_STORAGE /storage/sdcard1
-
-on post-fs
-    export LD_PRELOAD libNimsWrap.so
-
-on early-boot
-    # Set RLIMIT_MEMLOCK to 64MB
-    setrlimit 8 67108864 67108864
-
-    # SSR Setup
-    write /sys/bus/msm_subsys/devices/subsys0/restart_level "related"
-    write /sys/bus/msm_subsys/devices/subsys1/restart_level "related"
-    write /sys/bus/msm_subsys/devices/subsys2/restart_level "related"
-
-    write /sys/kernel/boot_adsp/boot 1
-
-on fs
-    wait /dev/block/bootdevice
-    mount_all fstab.qcom
-    write /proc/sys/vm/swappiness 100
-
-    # Keeping following partitions outside fstab file. As user may not have
-    # these partition flashed on the device. Failure to mount any partition in fstab file
-    # results in failure to launch late-start class.
-
-    wait /dev/block/bootdevice/by-name/cache
-    mount ext4 /dev/block/bootdevice/by-name/cache /cache nosuid nodev barrier=1
-
-    wait /dev/block/bootdevice/by-name/persist
-    mount ext4 /dev/block/bootdevice/by-name/persist /persist nosuid nodev barrier=1
-    mkdir /persist/data 0700 system system
-    restorecon_recursive /persist
-
-    wait /dev/block/bootdevice/by-name/modem
-    mount vfat /dev/block/bootdevice/by-name/modem /firmware ro context=u:object_r:firmware_file:s0,shortname=lower,uid=1000,gid=1000,dmask=227,fmask=337
-    write /sys/kernel/boot_adsp/boot 1
-
-    restorecon_recursive /asdf
-    restorecon_recursive /factory
-
-on post-fs-data
-    mkdir /data/tombstones 0771 system system
-    mkdir /tombstones/modem 0771 system system
-    mkdir /tombstones/lpass 0771 system system
-    mkdir /tombstones/wcnss 0771 system system
-    mkdir /tombstones/dsps 0771 system system
-    mkdir /persist/data/sfs 0700 system system
-    mkdir /persist/data/tz 0700 system system
-    mkdir /data/misc/hbtp 0766 system system
-    mkdir /data/misc/dts 0770 media audio
-    chown system system /sys/afe_properties/cfg_name
-    chown system system /sys/afe_properties/hallib_name
-    chown system system /sys/afe_properties/wake_up_enable
-
-    # Mounting of persist, asdf and factory is moved to 'on emmc-fs' and 'on fs' sections
-    # We chown/chmod them again so because mount is run as root + defaults
-    chown system system /asdf
-    chmod 0775 /asdf
-    chown system system /factory
-    chmod 0775 /factory
-
 on boot
-    start rmt_storage
-    insmod /system/lib/modules/adsprpc.ko
 
-# access permission for secure touch
-    chmod 0660 /sys/devices/soc.0/78b9000.i2c/i2c-5/5-0020/secure_touch_enable
-    chmod 0440 /sys/devices/soc.0/78b9000.i2c/i2c-5/5-0020/secure_touch
-    chmod 0660 /sys/devices/soc.0/78b9000.i2c/i2c-5/5-0070/secure_touch_enable
-    chmod 0440 /sys/devices/soc.0/78b9000.i2c/i2c-5/5-0070/secure_touch
-    chown system drmrpc /sys/devices/soc.0/78b9000.i2c/i2c-5/5-0020/secure_touch_enable
-    chown system drmrpc /sys/devices/soc.0/78b9000.i2c/i2c-5/5-0020/secure_touch
-    chown system drmrpc /sys/devices/soc.0/78b9000.i2c/i2c-5/5-0070/secure_touch_enable
-    chown system drmrpc /sys/devices/soc.0/78b9000.i2c/i2c-5/5-0070/secure_touch
-
-# Permissions for touchscreen
+    # Permissions for touchscreen
     chown system system /sys/bus/i2c/devices/i2c-5/5-0038/glove_mode
     chmod 0664 /sys/bus/i2c/devices/i2c-5/5-0038/glove_mode
     chown system radio /sys/bus/i2c/devices/i2c-5/5-0038/dclick_mode
@@ -135,13 +40,64 @@ on boot
     chmod 0664 /sys/bus/i2c/devices/i2c-5/5-0038/keypad_mode
     chown system system /proc/asus_touch_proximity_status
 
-# Leds
-    chown system system /sys/class/leds/green/pwm_us
-    chown system system /sys/class/leds/red/pwm_us
+    # Sensors
+    symlink /sys/bus/platform/devices/soc.0/hall_sensor/hall_sensor/status    /data/data/hallsensor_status
+    symlink /sys/bus/platform/devices/soc.0/hall_sensor/hall_sensor/debounce    /data/data/hallsensor_debounce
+    chmod 0600 /data/data/hallsensor_status
+    chmod 0600 /data/data/hallsensor_debounce
 
-    chown system system /dev/lightsensor
-    chmod 0660 /dev/lightsenso
+    chown system system /sys/bus/i2c/devices/0-001f/enable
+    chown system system /sys/bus/i2c/devices/0-001f/delay
 
+    chmod 0660 /sys/bus/i2c/devices/0-001f/enable
+    chmod 0660 /sys/bus/i2c/devices/0-001f/delay
+
+    chmod 0774 /sys/bus/i2c/devices/0-000f/Gsensor_raw
+    chmod 0774 /sys/bus/i2c/devices/0-000f/Gsensor_status
+
+    # AKM E-compass
+    chown system system /sys/class/compass/akm09911/enable_acc
+    chown system system /sys/class/compass/akm09911/enable_mag
+    chown system system /sys/class/compass/akm09911/enable_fusion
+    chown system system /sys/class/compass/akm09911/delay_acc
+    chown system system /sys/class/compass/akm09911/delay_mag
+    chown system system /sys/class/compass/akm09911/delay_fusion
+    chown system system /sys/class/compass/akm09911/accel
+    chown system system /dev/akm09911_dev
+    chown system system /sys/class/i2c-adapter/i2c-0/0-001e/mode
+
+    chmod 0660 /sys/class/compass/akm09911/enable_mag
+    chmod 0660 /sys/class/compass/akm09911/delay_mag
+    chmod 0660 /sys/class/compass/akm09911/enable_acc
+    chmod 0660 /sys/class/compass/akm09911/delay_acc
+    chmod 0660 /sys/class/compass/akm09911/enable_fusion
+    chmod 0660 /sys/class/compass/akm09911/delay_fusion
+    chmod 0660 /dev/akm09911_dev
+
+    chmod 0774 /sys/devices/virtual/compass/akm09911/akm_status
+    chmod 0774 /sys/devices/virtual/compass/akm09911/akm_09911_raw
+    chmod 0774 /sys/devices/virtual/compass/akm09911/akm_i2c
+    chmod 0774 /sys/class/i2c-adapter/i2c-0/0-001e/mode
+
+on post-fs-data
+
+# ASUS_BSP +++ Lei_Guo "storage info for ATD and AMAX"
+    symlink /sys/bus/mmc/devices/mmc0:0001/emmc_status /data/data/emmc_status
+    symlink /sys/bus/mmc/devices/mmc0:0001/emmc_size /data/data/emmc_size
+    symlink /sys/bus/mmc/devices/mmc0:0001/emmc_prv /data/data/emmc_fw
+    symlink /sys/bus/mmc/devices/mmc0:0001/emmc_fw_version /data/data/emmc_fw_version
+    symlink /sys/bus/mmc/devices/mmc0:0001/emmc_total_size /data/data/emmc_total_size
+    symlink /sys/devices/soc.0/7864900.sdhci/mmc_host/mmc1/sd_status /data/data/sd_status
+
+    chmod 0777 /data/data/emmc_status
+    chmod 0777 /data/data/emmc_size
+    chmod 0777 /data/data/emmc_fw
+    chmod 0777 /data/data/emmc_fw_version
+    chmod 0777 /data/data/emmc_total_size
+    chmod 0777 /data/data/sd_status
+# ASUS_BSP --- Lei_Guo "storage info for ATD and AMAX"
+
+#ASUS_BSP Jeff_Gu : add for Led blink time +++
     chown system system /sys/class/leds/red/on_ms
     chmod 0664 /sys/class/leds/red/on_ms
     chown system system /sys/class/leds/green/on_ms
@@ -150,31 +106,47 @@ on boot
     chmod 0664 /sys/class/leds/red/off_ms
     chown system system /sys/class/leds/green/off_ms
     chmod 0664 /sys/class/leds/green/off_ms
+#ASUS_BSP Jeff_Gu : add for Led blink time ---
 
-    chown system shell /sys/devices/virtual/sensors/psensor/switch
-    chown system shell /sys/devices/virtual/sensors/lsensor/switch
-    chown system shell /sys/devices/virtual/sensors/psensor/hi_cal
-    chown system shell /sys/devices/virtual/sensors/psensor/low_cal
-    chown system shell /sys/devices/virtual/sensors/psensor/proxm
-    chown system shell /sys/devices/virtual/sensors/lsensor/200lux_cal
-    chown system shell /sys/devices/virtual/sensors/lsensor/1000lux_cal
-    chown system shell /sys/devices/virtual/sensors/lsensor/adc
+#ASUS_BSP David "[BAT]add BMMI interface for ATD"
+    symlink /proc/driver/charger_limit_enable /data/data/charger_limit_enable
+    symlink /proc/driver/chargerIC_status /data/data/chargerIC_status
+    symlink /proc/driver/gaugeIC_status /data/data/gaugeIC_status
+    symlink /sys/class/power_supply/battery/capacity /data/data/battery_status
+    symlink /sys/class/power_supply/battery/capacity /data/data/BatteryCapacity
+    symlink /proc/driver/bat_current /data/data/BatteryCurrent
+    symlink /proc/driver/bat_voltage /data/data/BatteryVoltage
 
-    chown system system /sys/class/leds/lcd-backlight/brightness
-    chmod 0664 /sys/class/leds/lcd-backlight/brightness
-    symlink /sys/class/leds/lcd-backlight/brightness /data/data/BLTest
-    chmod 777 /data/data/BLTest
+#ASUS_BSP +++ Stimber_Hsueh "implement camera interface for ATD"
+    rm /data/data/camera_status
+    symlink /proc/driver/camera_status /data/data/camera_status
+    chmod 0777 /data/data/camera_status
 
-    symlink /sys/bus/platform/devices/soc.0/hall_sensor/hall_sensor/status	/data/data/hallsensor_status
-    symlink /sys/bus/platform/devices/soc.0/hall_sensor/hall_sensor/debounce	/data/data/hallsensor_debounce
-    chmod 0600 /data/data/hallsensor_status
-    chmod 0600 /data/data/hallsensor_debounce
+    rm /data/data/vga_status
+    symlink /proc/driver/vga_status /data/data/vga_status
+    chmod 0777 /data/data/vga_status
 
-    chown system shell /sys/bus/i2c/devices/0-001f/double_tap
-    chown system shell /sys/bus/i2c/devices/0-001f/flip
-    chown system shell /sys/bus/i2c/devices/0-001f/flick
-    chown system shell /sys/bus/i2c/devices/0-001f/hands
+    rm /data/data/GetRearCameraResolution
+    symlink /proc/driver/GetRearCameraResolution /data/data/GetRearCameraResolution
+    chmod 0777 /data/data/GetRearCameraResolution
+#ASUS_BSP --- Stimber_Hsueh "implement camera interface for ATD"
 
+#ASUS_BSP +++ PJ "implement CalibrationBackup interface for ATD&DIT"
+    rm /data/data/Camera_Unique_ID
+    symlink /system/bin/Camera_Unique_ID /data/data/Camera_Unique_ID
+    chmod 0777 /data/data/Camera_Unique_ID
+    chown system shell /data/data/Camera_Unique_ID
+    rm /data/data/BackupCalibrationData
+    symlink /system/bin/BackupCalibrationData /data/data/BackupCalibrationData
+    chmod 0777 /data/data/BackupCalibrationData
+    chown system shell /data/data/BackupCalibrationData
+    rm /data/data/RestoreCalibrationData
+    symlink /system/bin/RestoreCalibrationData /data/data/RestoreCalibrationData
+    chmod 0777 /data/data/RestoreCalibrationData
+    chown system shell /data/data/RestoreCalibrationData
+#ASUS_BSP --- PJ "implement CalibrationBackup interface for ATD&DIT"
+
+#ASUS_BSP +++ Surya_Xu "CSC Laser"
     chown media sdcard_rw /proc/driver/LaserFocus_on
     chown media sdcard_rw /proc/driver/LaserFocus_value
     chown system sdcard_rw /proc/driver/LaserFocus_Status
@@ -202,41 +174,5 @@ on boot
     symlink /system/bin/LaserFocus_enforce /data/data/LaserFocus_disable
     symlink /proc/driver/LaserFocus_debug_dump /data/data/LaserFocus_debug_dump
     symlink /proc/driver/LaserFocus_I2c_Status /data/data/LaserFocus_I2c_Status
+#ASUS_BSP --- Surya_Xu "CSC Laser"
 
-    #  Permissions for Sensors
-    # accelerometer kx022
-    chown system system /sys/bus/i2c/devices/0-001f/enable
-    chown system system /sys/bus/i2c/devices/0-001f/delay
-
-    chmod 0660 /sys/bus/i2c/devices/0-001f/enable
-    chmod 0660 /sys/bus/i2c/devices/0-001f/delay
-
-    # AKM E-compass
-    chown system system /sys/class/compass/akm09911/enable_acc
-    chown system system /sys/class/compass/akm09911/enable_mag
-    chown system system /sys/class/compass/akm09911/enable_fusion
-    chown system system /sys/class/compass/akm09911/delay_acc
-    chown system system /sys/class/compass/akm09911/delay_mag
-    chown system system /sys/class/compass/akm09911/delay_fusion
-    chown system system /sys/class/compass/akm09911/accel
-    chown system system /dev/akm09911_dev
-
-    chmod 0660 /sys/class/compass/akm09911/enable_mag
-    chmod 0660 /sys/class/compass/akm09911/delay_mag
-    chmod 0660 /sys/class/compass/akm09911/enable_acc
-    chmod 0660 /sys/class/compass/akm09911/delay_acc
-    chmod 0660 /sys/class/compass/akm09911/enable_fusion
-    chmod 0660 /sys/class/compass/akm09911/delay_fusion
-    chmod 0660 /dev/akm09911_dev
-
-    chmod 0774 /sys/devices/virtual/compass/akm09911/akm_status
-    chmod 0774 /sys/devices/virtual/compass/akm09911/akm_09911_raw
-    chmod 0774 /sys/devices/virtual/compass/akm09911/akm_i2c
-    chmod 0774 /sys/bus/i2c/devices/0-000f/Gsensor_raw
-    chmod 0774 /sys/bus/i2c/devices/0-000f/Gsensor_status
-
-on property:sys.usb_uicc.enabled=1
-    start usb_uicc_enable
-
-on property:sys.usb_uicc.enabled=0
-    start usb_uicc_enable

@@ -105,16 +105,7 @@ void vendor_load_properties()
     heapsize = "512m";
     heapminfree = "2m";
 
-    sprintf(b_description, "%s-user 6.0.1 MMB29P 13.8.26.46-20160812 release-keys", family);
-    sprintf(b_fingerprint, "asus/%s/ASUS_%s:6.0.1/MMB29P/13.8.26.46-20160812:user/release-keys", family, device);
-    sprintf(p_device, "ASUS_%s", device);
-    sprintf(p_carrier, "US-ASUS_%s-%s", device, family);
-
     property_set("ro.build.product", product);
-    property_set("ro.build.description", b_description);
-    property_set("ro.build.fingerprint", b_fingerprint);
-    property_set("ro.product.carrier", p_carrier);
-    property_set("ro.product.device", p_device);
     property_set("ro.product.model", "Zenfone Max");
     property_set("ro.build.product", "ZC550KL");
 
@@ -130,5 +121,5 @@ void vendor_load_properties()
         property_set("ro.product.model", "Zenfone"); // this should never happen.
     }
 
-    INFO("Setting build properties for %s device of %s family\n", device, family);
+    INFO("Setting build properties for %s device\n", device, family);
 }
