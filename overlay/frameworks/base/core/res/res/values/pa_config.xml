@@ -30,6 +30,9 @@
        config to 19. -->
     <integer name="config_deviceHardwareKeys">19</integer>
 
+    <integer name="config_doubleTapKeyCode">1</integer>
+    <integer name="config_doubleTapDefault">1</integer>
+
 </resources>
 
 

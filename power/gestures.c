@@ -37,29 +37,4 @@ void set_device_specific_feature(struct power_module *module __unused,
         return;
     }
 
-    if (feature == POWER_FEATURE_DRAW_V) {
-        sysfs_write(DRAW_V_NODE, tmp_str);
-        return;
-    }
-
-    if (feature == POWER_FEATURE_DRAW_O) {
-        sysfs_write(DRAW_O_NODE, tmp_str);
-        return;
-    }
-
-    if (feature == POWER_FEATURE_DRAW_ARROW_LEFT) {
-        arrowLeft = state;
-    }
-
-    if (feature == POWER_FEATURE_DRAW_ARROW_RIGHT) {
-        arrowRight = state;
-    }
-
-    if (feature == POWER_FEATURE_TWO_FINGER_SWIPE) {
-        twoFingerSwipeDown = state;
-    }
-
-    sysfs_write(DRAW_ARROW_LEFT_NODE, arrowLeft || arrowRight
-            || twoFingerSwipeDown ? "1" : "0");
-
 }

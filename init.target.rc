@@ -27,6 +27,20 @@
 #
 #
 
+on init
+
+# mount asus partition
+    mkdir /factory 0775 system system
+    mkdir /factoryback 0775 system system
+    mkdir /asusfw 0775 system system
+    mkdir /asdf
+    mkdir /ADF 0775 system system
+    mkdir /APD 0775 system system
+
+on fs
+
+on post-fs
+
 on boot
 
     # Permissions for touchscreen

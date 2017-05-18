@@ -138,6 +138,7 @@ TARGET_PER_MGR_ENABLED := true
 
 # Tap-to-Wake
 TARGET_POWER_GESTURE_FILE := device/asus/Z010D/power/gestures.c
+TARGET_GESTURES_NODE := "/sys/bus/i2c/devices/i2c-5/5-0038/gesture_mode"
 TARGET_TAP_TO_WAKE_NODE := "/sys/bus/i2c/devices/i2c-5/5-0038/dclick_mode"
 
 WITH_DEXPREOPT := false
