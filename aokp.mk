@@ -1,12 +1,12 @@
 # Inherit from device specific
 $(call inherit-product, device/asus/Z010D/full_Z010D.mk)
 
-# Inherit some common Lineage stuff.
-$(call inherit-product, vendor/cm/config/common_full_phone.mk)
+# Inherit some common AOKP stuff.
+$(call inherit-product, vendor/aokp/configs/common_full_phone.mk)
 
-DEVICE_PACKAGE_OVERLAYS += device/asus/msm8916-common/overlay/lineage
+DEVICE_PACKAGE_OVERLAYS += device/asus/msm8916-common/overlay/aokp
 
-PRODUCT_NAME := lineage_Z010D
+PRODUCT_NAME := aokp_Z010D
 PRODUCT_DEVICE := Z010D
 PRODUCT_BRAND := asus
 PRODUCT_MODEL := Zenfone Max
