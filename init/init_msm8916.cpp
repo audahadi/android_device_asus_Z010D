@@ -123,10 +123,10 @@ void vendor_load_properties()
     sprintf(p_device, "ASUS_%s", device);
     sprintf(p_carrier, "US-ASUS_%s-%s", device, family);
 
-    property_set("ro.build.product", product);
-    property_set("ro.product.device", p_device);
-    property_set("ro.product.model", "Zenfone Max");
-    property_set("ro.build.product", "ZC550KL");
+    property_override("ro.build.product", product);
+    property_override("ro.product.device", p_device);
+    property_override("ro.product.model", "Zenfone Max");
+    property_override("ro.build.product", "ZC550KL");
 
     /* Heap Set */
     property_set("dalvik.vm.heapstartsize", heapstartsize);
