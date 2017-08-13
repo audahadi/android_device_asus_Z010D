@@ -42,7 +42,7 @@
 #include "log.h"
 #include "util.h"
 
-#define RAW_ID_PATH     "/sys/devices/soc0/raw_id"
+#define SKU_ID_PATH     "/sys/module/smd/parameters/modemsku"
 #define BUF_SIZE         64
 
 static char tmp[BUF_SIZE];
@@ -93,50 +93,63 @@ void property_override(char const prop[], char const value[])
 void vendor_load_properties()
 {
 
-    char b_description[PROP_VALUE_MAX], b_fingerprint[PROP_VALUE_MAX];
-    char p_carrier[PROP_VALUE_MAX], p_device[PROP_VALUE_MAX], p_model[PROP_VALUE_MAX];
-    unsigned long raw_id = -1;
+    char p_device[PROP_VALUE_MAX];
+    unsigned long sku_id = -1;
     int rc;
 
     /* get raw ID */
-    rc = read_file2(RAW_ID_PATH, tmp, sizeof(tmp));
+    rc = read_file2(SKU_ID_PATH, tmp, sizeof(tmp));
     if (rc) {
-        raw_id = strtoul(tmp, NULL, 0);
+        sku_id = strtoul(tmp, NULL, 0);
     }
 
     /* Z010D  */
-    if (raw_id==1797) {
+    if (sku_id==2) {
 
     /* Device Setting */
     family = "WW_Phone";
     device = "Z010D";
-    product = "ZC550KL"; // need for Сamera Hal project ID check
 
-    /* Heap Setting */
-    heapstartsize = "8m";
-    heapgrowthlimit = "192m";
-    heapsize = "512m";
-    heapminfree = "2m";
-
-    sprintf(b_description, "%s-user 6.0.1 MMB29P 13.8.26.46-20160812 release-keys", family);
-    sprintf(b_fingerprint, "asus/%s/ASUS_%s:6.0.1/MMB29P/13.8.26.46-20160812:user/release-keys", family, device);
     sprintf(p_device, "ASUS_%s", device);
-    sprintf(p_carrier, "US-ASUS_%s-%s", device, family);
 
-    property_override("ro.build.product", product);
     property_override("ro.product.device", p_device);
-    property_override("ro.product.model", "Zenfone Max");
+    property_override("ro.product.model", "Zenfone Max (8916)");
     property_override("ro.build.product", "ZC550KL");
 
     /* Heap Set */
-    property_set("dalvik.vm.heapstartsize", heapstartsize);
-    property_set("dalvik.vm.heapgrowthlimit", heapgrowthlimit);
-    property_set("dalvik.vm.heapsize", heapsize);
+    property_set("dalvik.vm.heapstartsize", "8m");
+    property_set("dalvik.vm.heapgrowthlimit", "192m");
+    property_set("dalvik.vm.heapsize", "512m");
     property_set("dalvik.vm.heaptargetutilization", "0.75");
-    property_set("dalvik.vm.heapminfree", heapminfree);
+    property_set("dalvik.vm.heapminfree", "2m");
     property_set("dalvik.vm.heapmaxfree", "8m");
 
-    } else {
+    } else
+
+    /* Z010DD  */
+    if (sku_id==3) {
+
+    /* Device Setting */
+    family = "WW_Phone";
+    device = "Z010_2";
+
+    sprintf(p_device, "ASUS_%s", device);
+
+    property_override("ro.product.device", p_device);
+    property_override("ro.product.model", "Zenfone Max (8939)");
+    property_override("ro.build.product", "ZC550KL");
+
+    /* Heap Set */
+    property_set("dalvik.vm.heapstartsize", "5m");
+    property_set("dalvik.vm.heapgrowthlimit", "128m");
+    property_set("dalvik.vm.heapsize", "256m");
+    property_set("dalvik.vm.heaptargetutilization", "0.75");
+    property_set("dalvik.vm.heapminfree", "512k");
+    property_set("dalvik.vm.heapmaxfree", "2m");
+
+    }
+
+    else {
         property_set("ro.product.model", "Zenfone"); // this should never happen.
     }
 
