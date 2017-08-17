@@ -113,7 +113,7 @@ void vendor_load_properties()
     sprintf(p_device, "ASUS_%s", device);
 
     property_override("ro.product.device", p_device);
-    property_override("ro.product.model", "Zenfone Max (8916)");
+    property_override("ro.product.model", "ASUS_Z010D");
     property_override("ro.build.product", "ZC550KL");
 
     /* Heap Set */
@@ -136,8 +136,9 @@ void vendor_load_properties()
     sprintf(p_device, "ASUS_%s", device);
 
     property_override("ro.product.device", p_device);
-    property_override("ro.product.model", "Zenfone Max (8939)");
+    property_override("ro.product.model", "ASUS_Z010DD");
     property_override("ro.build.product", "ZC550KL");
+    property_set("ro.build.project.name", "ZC550KL");
 
     /* Heap Set */
     property_set("dalvik.vm.heapstartsize", "5m");
