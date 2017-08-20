@@ -16,6 +16,7 @@
 
 # call the proprietary setup
 $(call inherit-product-if-exists, vendor/asus/Z010D/Z010D-vendor.mk)
+$(call inherit-product-if-exists, vendor/asus/Z010D/Z010DD-vendor.mk)
 
 $(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
 
@@ -54,23 +55,4 @@ PRODUCT_COPY_FILES += \
     device/asus/Z010D/Z010DD/etc/prima/WCNSS_cfg.dat:install/bin/prima/WCNSS_cfg.dat \
     device/asus/Z010D/Z010DD/etc/prima/WCNSS_qcom_wlan_nv.bin:install/bin/prima/WCNSS_qcom_wlan_nv.bin \
     device/asus/Z010D/Z010DD/etc/wifi/WCNSS_qcom_cfg.ini:install/bin/wifi/WCNSS_qcom_cfg.ini
-
-
-PRODUCT_COPY_FILES += \
-    device/asus/Z010D/Z010DD/etc/firmware/keymaster.b00:install/bin/firmware/keymaster.b00 \
-    device/asus/Z010D/Z010DD/etc/firmware/keymaster.b01:install/bin/firmware/keymaster.b01 \
-    device/asus/Z010D/Z010DD/etc/firmware/keymaster.b02:install/bin/firmware/keymaster.b02 \
-    device/asus/Z010D/Z010DD/etc/firmware/keymaster.b03:install/bin/firmware/keymaster.b03 \
-    device/asus/Z010D/Z010DD/etc/firmware/keymaster.mdt:install/bin/firmware/keymaster.mdt
-
-PRODUCT_COPY_FILES += \
-    device/asus/Z010D/Z010DD/etc/firmware/wcnss.b00:install/bin/firmware/wcnss.b00 \
-    device/asus/Z010D/Z010DD/etc/firmware/wcnss.b01:install/bin/firmware/wcnss.b01 \
-    device/asus/Z010D/Z010DD/etc/firmware/wcnss.b02:install/bin/firmware/wcnss.b02 \
-    device/asus/Z010D/Z010DD/etc/firmware/wcnss.b04:install/bin/firmware/wcnss.b04 \
-    device/asus/Z010D/Z010DD/etc/firmware/wcnss.b06:install/bin/firmware/wcnss.b06 \
-    device/asus/Z010D/Z010DD/etc/firmware/wcnss.b09:install/bin/firmware/wcnss.b09 \
-    device/asus/Z010D/Z010DD/etc/firmware/wcnss.b10:install/bin/firmware/wcnss.b10 \
-    device/asus/Z010D/Z010DD/etc/firmware/wcnss.b11:install/bin/firmware/wcnss.b11 \
-    device/asus/Z010D/Z010DD/etc/firmware/wcnss.mdt:install/bin/firmware/wcnss.mdt
 
