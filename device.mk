@@ -52,7 +52,7 @@ PRODUCT_COPY_FILES += \
     device/asus/Z010D/Z010DD/kernel/boot.img:install/bin/boot.img
 
 PRODUCT_COPY_FILES += \
-    device/asus/Z010D/Z010DD/etc/prima/WCNSS_cfg.dat:install/bin/prima/WCNSS_cfg.dat \
-    device/asus/Z010D/Z010DD/etc/prima/WCNSS_qcom_wlan_nv.bin:install/bin/prima/WCNSS_qcom_wlan_nv.bin \
-    device/asus/Z010D/Z010DD/etc/wifi/WCNSS_qcom_cfg.ini:install/bin/wifi/WCNSS_qcom_cfg.ini
+    device/asus/Z010D/Z010DD/etc/prima/WCNSS_cfg.dat:install/bin/etc/firmware/wlan/prima/WCNSS_cfg.dat \
+    device/asus/Z010D/Z010DD/etc/prima/WCNSS_qcom_wlan_nv.bin:install/bin/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin \
+    device/asus/Z010D/Z010DD/etc/wifi/WCNSS_qcom_cfg.ini:install/bin/etc/wifi/WCNSS_qcom_cfg.ini
 
