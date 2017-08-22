@@ -42,7 +42,7 @@
 #include "log.h"
 #include "util.h"
 
-#define SKU_ID_PATH     "/sys/module/smd/parameters/modemsku"
+#define RAW_ID_PATH     "/sys/devices/soc0/raw_id"
 #define BUF_SIZE         64
 
 static char tmp[BUF_SIZE];
@@ -94,17 +94,17 @@ void vendor_load_properties()
 {
 
     char p_device[PROP_VALUE_MAX];
-    unsigned long sku_id = -1;
+    unsigned long raw_id = -1;
     int rc;
 
     /* get raw ID */
-    rc = read_file2(SKU_ID_PATH, tmp, sizeof(tmp));
+    rc = read_file2(RAW_ID_PATH, tmp, sizeof(tmp));
     if (rc) {
-        sku_id = strtoul(tmp, NULL, 0);
+        raw_id = strtoul(tmp, NULL, 0);
     }
 
     /* Z010D  */
-    if (sku_id==2) {
+    if (raw_id==1797) {
 
     /* Device Setting */
     family = "WW_Phone";
@@ -127,7 +127,7 @@ void vendor_load_properties()
     } else
 
     /* Z010DD  */
-    if (sku_id==3) {
+    if (raw_id==2315) {
 
     /* Device Setting */
     family = "WW_Phone";

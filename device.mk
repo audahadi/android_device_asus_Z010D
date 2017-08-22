@@ -16,7 +16,7 @@
 
 # call the proprietary setup
 $(call inherit-product-if-exists, vendor/asus/Z010D/Z010D-vendor.mk)
-$(call inherit-product-if-exists, vendor/asus/Z010D/Z010DD-vendor.mk)
+$(call inherit-product-if-exists, vendor/asus/Z010DD/Z010DD-vendor.mk)
 
 $(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
 
