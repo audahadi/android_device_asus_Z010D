@@ -2,7 +2,7 @@
 $(call inherit-product, device/asus/Z010D/full_Z010D.mk)
 
 # Inherit some common Lineage stuff.
-$(call inherit-product, vendor/cm/config/common_full_phone.mk)
+$(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 
 DEVICE_PACKAGE_OVERLAYS += device/asus/msm8916-common/overlay/lineage
 
