@@ -19,7 +19,7 @@
 DEVICE_PATH := device/asus/Z010D
 
 # Assert
-TARGET_OTA_ASSERT_DEVICE := Z010D,ASUS_Z010,Z010DD,ASUS_Z010_2
+TARGET_OTA_ASSERT_DEVICE := Z010D,ASUS_Z010D,Z010DD,ASUS_Z010DD,Z010_2
 
 # Board
 TARGET_BOARD_INFO_FILE := $(DEVICE_PATH)/board-info.txt
@@ -33,7 +33,7 @@ TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
 TARGET_INIT_VENDOR_LIB := libinit_msm8916
 TARGET_RECOVERY_DEVICE_MODULES := libinit_msm8916
 
-# Use Snapdragon LLVM, if available		
+# Use Snapdragon LLVM, if available
 TARGET_USE_SDCLANG := true
 
 # inherit from the proprietary version
