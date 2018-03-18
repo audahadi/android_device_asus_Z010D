@@ -118,15 +118,15 @@ on post-fs-data
 
 #ASUS_BSP +++ PJ "implement CalibrationBackup interface for ATD&DIT"
     rm /data/data/Camera_Unique_ID
-    symlink /system/bin/Camera_Unique_ID /data/data/Camera_Unique_ID
+    symlink /system/vendor/bin/Camera_Unique_ID /data/data/Camera_Unique_ID
     chmod 0777 /data/data/Camera_Unique_ID
 	chown system shell /data/data/Camera_Unique_ID
     rm /data/data/BackupCalibrationData
-    symlink /system/bin/BackupCalibrationData /data/data/BackupCalibrationData
+    symlink /system/vendor/bin/BackupCalibrationData /data/data/BackupCalibrationData
     chmod 0777 /data/data/BackupCalibrationData
 	chown system shell /data/data/BackupCalibrationData
     rm /data/data/RestoreCalibrationData
-    symlink /system/bin/RestoreCalibrationData /data/data/RestoreCalibrationData
+    symlink /system/vendor/bin/RestoreCalibrationData /data/data/RestoreCalibrationData
     chmod 0777 /data/data/RestoreCalibrationData
 	chown system shell /data/data/RestoreCalibrationData
 #ASUS_BSP --- PJ "implement CalibrationBackup interface for ATD&DIT"
@@ -165,12 +165,12 @@ on post-fs-data
 	rm /data/data/LaserFocus_debug_dump
 	rm /data/data/LaserFocus_I2c_Status
 
-	symlink /system/bin/LaserFocus_on /data/data/LaserFocus_on
+	symlink /system/vendor/bin/LaserFocus_on /data/data/LaserFocus_on
 	symlink /proc/driver/LaserFocus_value /data/data/LaserFocus_value
 	symlink /proc/driver/LaserFocus_value_more_info /data/data/LaserFocus_value_more_info
 	symlink /proc/driver/LaserFocus_Status /data/data/LaserFocus_Status
-	symlink /system/bin/LaserFocus_CalStart /data/data/LaserFocus_CalStart
-	symlink /system/bin/LaserFocus_enforce /data/data/LaserFocus_disable
+	symlink /system/vendor/bin/LaserFocus_CalStart /data/data/LaserFocus_CalStart
+	symlink /system/vendor/bin/LaserFocus_enforce /data/data/LaserFocus_disable
 	symlink /proc/driver/LaserFocus_debug_dump /data/data/LaserFocus_debug_dump
 	symlink /proc/driver/LaserFocus_I2c_Status /data/data/LaserFocus_I2c_Status
 #ASUS_BSP --- Surya_Xu "CSC Laser"

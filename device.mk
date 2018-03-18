@@ -38,7 +38,7 @@ PRODUCT_PACKAGES += \
     init.target.rc
 
 PRODUCT_COPY_FILES += \
-    device/asus/Z010D/audio/mixer_paths_mtp.xml:system/etc/mixer_paths_mtp.xml
+    device/asus/Z010D/audio/mixer_paths_mtp.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths_mtp.xml
 
 # Properties
 PRODUCT_PROPERTY_OVERRIDES += \
