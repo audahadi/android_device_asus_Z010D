@@ -22,7 +22,7 @@ on fs
     restorecon_recursive /asusfw
     chmod 0775 /asusfw
     chown system system /asusfw
-    
+
     start FWAuto
 
 on post-fs
@@ -118,15 +118,15 @@ on post-fs-data
 
 #ASUS_BSP +++ PJ "implement CalibrationBackup interface for ATD&DIT"
     rm /data/data/Camera_Unique_ID
-    symlink /system/vendor/bin/Camera_Unique_ID /data/data/Camera_Unique_ID
+    symlink /system/bin/Camera_Unique_ID /data/data/Camera_Unique_ID
     chmod 0777 /data/data/Camera_Unique_ID
 	chown system shell /data/data/Camera_Unique_ID
     rm /data/data/BackupCalibrationData
-    symlink /system/vendor/bin/BackupCalibrationData /data/data/BackupCalibrationData
+    symlink /system/bin/BackupCalibrationData /data/data/BackupCalibrationData
     chmod 0777 /data/data/BackupCalibrationData
 	chown system shell /data/data/BackupCalibrationData
     rm /data/data/RestoreCalibrationData
-    symlink /system/vendor/bin/RestoreCalibrationData /data/data/RestoreCalibrationData
+    symlink /system/bin/RestoreCalibrationData /data/data/RestoreCalibrationData
     chmod 0777 /data/data/RestoreCalibrationData
 	chown system shell /data/data/RestoreCalibrationData
 #ASUS_BSP --- PJ "implement CalibrationBackup interface for ATD&DIT"
@@ -165,12 +165,12 @@ on post-fs-data
 	rm /data/data/LaserFocus_debug_dump
 	rm /data/data/LaserFocus_I2c_Status
 
-	symlink /system/vendor/bin/LaserFocus_on /data/data/LaserFocus_on
+	symlink /system/bin/LaserFocus_on /data/data/LaserFocus_on
 	symlink /proc/driver/LaserFocus_value /data/data/LaserFocus_value
 	symlink /proc/driver/LaserFocus_value_more_info /data/data/LaserFocus_value_more_info
 	symlink /proc/driver/LaserFocus_Status /data/data/LaserFocus_Status
-	symlink /system/vendor/bin/LaserFocus_CalStart /data/data/LaserFocus_CalStart
-	symlink /system/vendor/bin/LaserFocus_enforce /data/data/LaserFocus_disable
+	symlink /system/bin/LaserFocus_CalStart /data/data/LaserFocus_CalStart
+	symlink /system/bin/LaserFocus_enforce /data/data/LaserFocus_disable
 	symlink /proc/driver/LaserFocus_debug_dump /data/data/LaserFocus_debug_dump
 	symlink /proc/driver/LaserFocus_I2c_Status /data/data/LaserFocus_I2c_Status
 #ASUS_BSP --- Surya_Xu "CSC Laser"
@@ -234,17 +234,17 @@ on charger-zc550kl
 
     wait /dev/block/bootdevice/by-name/modem
     mount vfat /dev/block/bootdevice/by-name/modem /firmware ro context=u:object_r:firmware_file:s0,shortname=lower,uid=1000,gid=1000,dmask=227,fmask=337
-    write /sys/kernel/boot_adsp/boot 1   
-   
+    write /sys/kernel/boot_adsp/boot 1
+
     wait /dev/block/bootdevice/by-name/factory
     exec /system/bin/e2fsck -p /dev/block/bootdevice/by-name/factory
     mount ext4 /dev/block/bootdevice/by-name/factory /factory ro nosuid nodev barrier=1 noauto_da_alloc
     restorecon_recursive /factory
     chmod 0775 /factory
     chown system system /factory
-    
+
     start rmt_storage
-    
+
     chown root system /sys/class/power_supply/bms/current_now
     chown root system /sys/class/power_supply/bms/voltage_ocv
     chmod 0664 /sys/class/power_supply/bms/current_now
@@ -263,3 +263,52 @@ on charger-zc550kl
     write /proc/asusevtlog "charger: enter charger mode"
 #---ASUS_BSP : add for charger mode to enable uart console , adb and mount asdf folder
 
+on property:sys.usb.config=rndis,diag,adb
+     write /sys/class/android_usb/android0/enable 0
+     write /sys/class/android_usb/android0/idVendor 05C6
+     write /sys/class/android_usb/android0/idProduct 902D
+     write /sys/class/android_usb/android0/f_diag/clients diag
+     write /sys/class/android_usb/android0/functions rndis,diag,adb
+     write /sys/class/android_usb/android0/enable 1
+     start adbd
+     setprop sys.usb.state ${sys.usb.config}
+
+on property:persist.usb.otg.poweron=1
+     write /proc/msm_otg/otg_poweron 1
+
+ on property:persist.usb.otg.poweron=0
+     write /proc/msm_otg/otg_poweron 0
+
+on property:sys.boot_completed=1
+     write /proc/msm_otg/otg_boot_check 1
+
+on diag
+     stop adbd
+     mkdir /dev/usb-ffs 0770 shell shell
+     mkdir /dev/usb-ffs/adb 0770 shell shell
+     mount functionfs adb /dev/usb-ffs/adb uid=2000,gid=2000
+     write /sys/class/android_usb/android0/f_ffs/aliases adb
+     write /sys/class/android_usb/android0/diag 1
+     write /sys/class/android_usb/android0/enable 0
+     write /sys/class/android_usb/android0/f_diag/clients diag
+     write /sys/class/android_usb/android0/f_serial/transports smd,tty
+     write /sys/class/android_usb/android0/functions diag,adb,serial
+     write /sys/class/android_usb/android0/iSerial  C4ATAS000000
+     write /sys/class/android_usb/android0/enable 1
+     setprop sys.usb.diag 1
+     start adbd
+     start qcomsysd
+     start yepdiag
+
+on usb-config-none
+     write /sys/class/android_usb/android0/enable 0
+     write  /sys/class/android_usb/android0/functions mtp
+     write /sys/class/android_usb/android0/diag 1
+     write /sys/class/android_usb/android0/enable 1
+
+on property:sys.usb.charger.factory=0
+     stop adbd
+     write /sys/class/android_usb/android0/diag 0
+     write /sys/class/android_usb/android0/enable 0
+     write /sys/class/android_usb/android0/bDeviceClass 0
+     setprop sys.usb.config none

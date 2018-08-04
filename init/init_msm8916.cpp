@@ -37,23 +37,18 @@
 #define _REALLY_INCLUDE_SYS__SYSTEM_PROPERTIES_H_
 #include <sys/_system_properties.h>
 
-#include <android-base/file.h>
-#include <android-base/logging.h>
 #include <android-base/properties.h>
-
 #include "vendor_init.h"
 #include "property_service.h"
-#include "log.h"
-#include "util.h"
+
+using android::base::GetProperty;
+using android::init::property_set;
 
 #define RAW_ID_PATH     "/sys/devices/soc0/raw_id"
 #define BUF_SIZE         64
 
-using android::base::GetProperty;
-using android::base::ReadFileToString;
-using android::init::property_set;
-
 static char tmp[BUF_SIZE];
+static char buff_tmp[BUF_SIZE];
 
 char const *device;
 char const *family;
@@ -72,7 +67,7 @@ static int read_file2(const char *fname, char *data, int max_size)
 
     fd = open(fname, O_RDONLY);
     if (fd < 0) {
-        LOG(ERROR) << "failed to open '" << fname << "'\n";
+        ("failed to open '%s'\n", fname);
         return 0;
     }
 
@@ -86,6 +81,33 @@ static int read_file2(const char *fname, char *data, int max_size)
     return 1;
 }
 
+static void init_alarm_boot_properties()
+{
+    int boot_reason;
+    FILE *fp;
+
+    fp = fopen("/proc/sys/kernel/boot_reason", "r");
+    fscanf(fp, "%d", &boot_reason);
+    fclose(fp);
+
+    /*
+     * Setup ro.alarm_boot value to true when it is RTC triggered boot up
+     * For existing PMIC chips, the following mapping applies
+     * for the value of boot_reason:
+     *
+     * 0 -> unknown
+     * 1 -> hard reset
+     * 2 -> sudden momentary power loss (SMPL)
+     * 3 -> real time clock (RTC)
+     * 4 -> DC charger inserted
+     * 5 -> USB charger inserted
+     * 6 -> PON1 pin toggled (for secondary PMICs)
+     * 7 -> CBLPWR_N pin toggled (for external power supply)
+     * 8 -> KPDPWR_N pin toggled (power key pressed)
+     */
+    property_set("ro.alarm_boot", boot_reason == 3 ? "true" : "false");
+}
+
 void property_override(char const prop[], char const value[])
 {
     prop_info *pi;
@@ -95,6 +117,12 @@ void property_override(char const prop[], char const value[])
         __system_property_update(pi, value, strlen(value));
     else
         __system_property_add(prop, strlen(prop), value, strlen(value));
+}
+
+void property_override_dual(char const system_prop[], char const vendor_prop[], char const value[])
+{
+    property_override(system_prop, value);
+    property_override(vendor_prop, value);
 }
 
 void vendor_load_properties()
@@ -119,9 +147,9 @@ void vendor_load_properties()
 
     sprintf(p_device, "ASUS_%s", device);
 
-    property_override("ro.product.device", p_device);
-    property_override("ro.product.model", "ASUS_Z010D");
-    property_override("ro.build.product", "ZC550KL");
+    property_override_dual("ro.product.device", "ro.vendor.product.device", p_device);
+    property_override_dual("ro.product.model", "ro.vendor.product.model", "ASUS_Z010D");
+    property_override_dual("ro.build.product", "ro.vendor.build.product", "ZC550KL");
 
     /* Heap Set */
     property_set("dalvik.vm.heapstartsize", "8m");
@@ -130,6 +158,10 @@ void vendor_load_properties()
     property_set("dalvik.vm.heaptargetutilization", "0.75");
     property_set("dalvik.vm.heapminfree", "2m");
     property_set("dalvik.vm.heapmaxfree", "8m");
+
+    /* Display Flicker Fix */
+    property_set("debug.hwui.use_buffer_age", "false");
+    property_set("ro.opengles.version", "196608");
 
     } else
 
@@ -142,9 +174,9 @@ void vendor_load_properties()
 
     sprintf(p_device, "ASUS_%s", device);
 
-    property_override("ro.product.device", p_device);
-    property_override("ro.product.model", "ASUS_Z010DD");
-    property_override("ro.build.product", "ZC550KL");
+    property_override_dual("ro.product.device", "ro.vendor.product.device", p_device);
+    property_override_dual("ro.product.model", "ro.vendor.product.model", "ASUS_Z010DD");
+    property_override_dual("ro.build.product", "ro.vendor.build.product", "ZC550KL");
     property_set("ro.build.project.name", "ZC550KL");
 
     /* Heap Set */
@@ -154,6 +186,9 @@ void vendor_load_properties()
     property_set("dalvik.vm.heaptargetutilization", "0.75");
     property_set("dalvik.vm.heapminfree", "512k");
     property_set("dalvik.vm.heapmaxfree", "2m");
+
+    /* Display Flicker Fix */
+    property_set("ro.opengles.version", "196610");
 
     }
 
