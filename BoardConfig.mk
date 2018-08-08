@@ -21,9 +21,6 @@ DEVICE_PATH := device/asus/Z010D
 # Assert
 TARGET_OTA_ASSERT_DEVICE := Z010D,ASUS_Z010D,Z010DD,ASUS_Z010DD,Z010_2
 
-# Board
-TARGET_BOARD_INFO_FILE := $(DEVICE_PATH)/board-info.txt
-
 # Kernel
 TARGET_KERNEL_CONFIG := zc550kl-custom_defconfig
 

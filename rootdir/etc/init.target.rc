@@ -1,86 +1,8 @@
 on fs
-# +++ ASUS_BSP : add for asus boot animation partition
-# mount ADF
-    wait /dev/block/bootdevice/by-name/ADF
-    mount ext4 /dev/block/bootdevice/by-name/ADF /ADF nosuid nodev barrier=1 data=ordered
-    chmod 0775 /ADF
-    chmod 0775 /ADF/boot
-    chown system system /ADF
-    restorecon_recursive /ADF
-
-    wait /dev/block/bootdevice/by-name/APD
-    mount ext4 /dev/block/bootdevice/by-name/APD /APD nosuid nodev barrier=1 data=ordered
-    chmod 0775 /APD
-    chown system system /APD
-    restorecon_recursive /APD
-# --- ASUS_BSP : add for asus boot animation partition
-
-# mount asusfw
-    wait /dev/block/bootdevice/by-name/asusfw
-    exec /system/bin/e2fsck -p /dev/block/bootdevice/by-name/asusfw
-    mount ext4 /dev/block/bootdevice/by-name/asusfw /asusfw nosuid nodev barrier=1 noauto_da_alloc
-    restorecon_recursive /asusfw
-    chmod 0775 /asusfw
-    chown system system /asusfw
-
-    start FWAuto
 
 on post-fs
 
 on post-fs-data
-
-# ASUS_BSP +++ Lei_Guo "storage info for ATD and AMAX"
-    symlink /sys/bus/mmc/devices/mmc0:0001/emmc_status /data/data/emmc_status
-    symlink /sys/bus/mmc/devices/mmc0:0001/emmc_size /data/data/emmc_size
-    symlink /sys/bus/mmc/devices/mmc0:0001/emmc_prv /data/data/emmc_fw
-    symlink /sys/bus/mmc/devices/mmc0:0001/emmc_fw_version /data/data/emmc_fw_version
-    symlink /sys/bus/mmc/devices/mmc0:0001/emmc_total_size /data/data/emmc_total_size
-    symlink /sys/devices/soc.0/7864900.sdhci/mmc_host/mmc1/sd_status /data/data/sd_status
-
-    chmod 0777 /data/data/emmc_status
-    chmod 0777 /data/data/emmc_size
-    chmod 0777 /data/data/emmc_fw
-    chmod 0777 /data/data/emmc_fw_version
-    chmod 0777 /data/data/emmc_total_size
-    chmod 0777 /data/data/sd_status
-# ASUS_BSP --- Lei_Guo "storage info for ATD and AMAX"
-
-# ASUS_BSP +++ Desmond "demoapp related"
-# Disable demoapp by default
-    setprop persist.sys.enableAPD 0
-# ASUS_BSP --- Desmond "demoapp related"
-
-# mount factory
-    wait /dev/block/bootdevice/by-name/factory
-    exec /system/bin/e2fsck -p /dev/block/bootdevice/by-name/factory
-    mount ext4 /dev/block/bootdevice/by-name/factory /factory ro nosuid nodev barrier=1 noauto_da_alloc
-    restorecon_recursive /factory
-    chmod 0775 /factory
-    chown root shell /factory
-
-    start CheckProp
-
-# mount asdf
-    wait /dev/block/bootdevice/by-name/asdf
-    exec /system/bin/e2fsck -p /dev/block/bootdevice/by-name/asdf
-    mount ext4 /dev/block/bootdevice/by-name/asdf /asdf nosuid nodev barrier=1
-    chmod 0777 /asdf
-    restorecon_recursive /asdf
-    start check_last
-
-# ASUS Freeman add for BMMI test ++++
-	symlink /sys/bus/i2c/devices/5-0038/touch_status /data/data/touch_status
-	chmod 0777 /data/data/touch_status
-	symlink /sys/bus/i2c/devices/5-0038/update_progress /data/touch_update_progress
-	chmod 0777 /data/touch_update_progress
-	chown system system /sys/bus/i2c/devices/5-0038/fw_upgradeapp
-	chown system system /sys/bus/i2c/devices/5-0038/fw_version
-	chown system system /sys/bus/i2c/devices/5-0038/ftstprwreg
-	chown system system /sys/bus/i2c/devices/5-0038/fw_info
-	chown system system /sys/bus/i2c/devices/5-0038/ftresetic
-	chown system system /sys/bus/i2c/devices/5-0038/glove_mode
-	chown system system /proc/asus_touch_proximity_status
-# ASUS Freeman add for BMMI test ----
 
 #ASUS_BSP Jeff_Gu : add for Led blink time +++
     chown system system /sys/class/leds/red/on_ms
@@ -92,15 +14,6 @@ on post-fs-data
     chown system system /sys/class/leds/green/off_ms
     chmod 0664 /sys/class/leds/green/off_ms
 #ASUS_BSP Jeff_Gu : add for Led blink time ---
-
-#ASUS_BSP David "[BAT]add BMMI interface for ATD"
-    symlink /proc/driver/charger_limit_enable /data/data/charger_limit_enable
-    symlink /proc/driver/chargerIC_status /data/data/chargerIC_status
-    symlink /proc/driver/gaugeIC_status /data/data/gaugeIC_status
-    symlink /sys/class/power_supply/battery/capacity /data/data/battery_status
-    symlink /sys/class/power_supply/battery/capacity /data/data/BatteryCapacity
-    symlink /proc/driver/bat_current /data/data/BatteryCurrent
-    symlink /proc/driver/bat_voltage /data/data/BatteryVoltage
 
 #ASUS_BSP +++ Stimber_Hsueh "implement camera interface for ATD"
 	rm /data/data/camera_status
@@ -137,13 +50,6 @@ on post-fs-data
 	chmod 0600 /data/data/hallsensor_status
 	chmod 0600 /data/data/hallsensor_debounce
 #ASUS_BSP --- srhuang "Hall Sensor"
-
-#ASUS_BSP +++ srhuang "Zen Motion"
-	chown system shell /sys/bus/i2c/devices/0-001f/double_tap
-	chown system shell /sys/bus/i2c/devices/0-001f/flip
-	chown system shell /sys/bus/i2c/devices/0-001f/flick
-	chown system shell /sys/bus/i2c/devices/0-001f/hands
-#ASUS_BSP --- srhuang "Zen Motion"
 
 #ASUS_BSP +++ Surya_Xu "CSC Laser"
 	chown media sdcard_rw /proc/driver/LaserFocus_on
@@ -208,107 +114,3 @@ on post-fs-data
     chmod 0774 /sys/bus/i2c/devices/0-000f/Gsensor_raw
     chmod 0774 /sys/bus/i2c/devices/0-000f/Gsensor_status
 
-# +++ ASUS_BSP : add for asus boot animation partition
-#mount APD
-on property:persist.sys.enableAPD=1
-    wait /dev/block/bootdevice/by-name/APD
-    mount ext4 /dev/block/bootdevice/by-name/APD /APD nosuid nodev barrier=1 data=ordered
-    chmod 0775 /APD
-    chown system system /APD
-    restorecon_recursive /APD
-
-#unmount APD
-on property:persist.sys.enableAPD=0
-    start umount_apd
-# --- ASUS_BSP : add for asus boot animation partition
-
-#+++ASUS_BSP : add for charger mode to enable uart console , adb and mount asdf folder
-on charger-zc550kl
-    setprop sys.usb.config mass_storage
-#service qseecomd for facotry to check keybox
-	start qseecomd
-    wait /dev/block/bootdevice/by-name/persist
-    mount ext4 /dev/block/bootdevice/by-name/persist /persist nosuid nodev barrier=1
-    mkdir /persist/data 0700 system system
-    restorecon_recursive /persist
-
-    wait /dev/block/bootdevice/by-name/modem
-    mount vfat /dev/block/bootdevice/by-name/modem /firmware ro context=u:object_r:firmware_file:s0,shortname=lower,uid=1000,gid=1000,dmask=227,fmask=337
-    write /sys/kernel/boot_adsp/boot 1
-
-    wait /dev/block/bootdevice/by-name/factory
-    exec /system/bin/e2fsck -p /dev/block/bootdevice/by-name/factory
-    mount ext4 /dev/block/bootdevice/by-name/factory /factory ro nosuid nodev barrier=1 noauto_da_alloc
-    restorecon_recursive /factory
-    chmod 0775 /factory
-    chown system system /factory
-
-    start rmt_storage
-
-    chown root system /sys/class/power_supply/bms/current_now
-    chown root system /sys/class/power_supply/bms/voltage_ocv
-    chmod 0664 /sys/class/power_supply/bms/current_now
-    chmod 0664 /sys/class/power_supply/bms/voltage_ocv
-    start vm_bms
-    load_all_props
-    start qcom-post-boot
-    class_start charger
-#mount asdf
-    wait /dev/block/bootdevice/by-name/asdf
-    exec /system/bin/e2fsck -p /dev/block/bootdevice/by-name/asdf
-    mount ext4 /dev/block/bootdevice/by-name/asdf /asdf nosuid nodev barrier=1
-
-    write /proc/asusevtlog  "ASDF: Check LastShutdown log."
-    write /proc/asusdebug  get_asdf_log
-    write /proc/asusevtlog "charger: enter charger mode"
-#---ASUS_BSP : add for charger mode to enable uart console , adb and mount asdf folder
-
-on property:sys.usb.config=rndis,diag,adb
-     write /sys/class/android_usb/android0/enable 0
-     write /sys/class/android_usb/android0/idVendor 05C6
-     write /sys/class/android_usb/android0/idProduct 902D
-     write /sys/class/android_usb/android0/f_diag/clients diag
-     write /sys/class/android_usb/android0/functions rndis,diag,adb
-     write /sys/class/android_usb/android0/enable 1
-     start adbd
-     setprop sys.usb.state ${sys.usb.config}
-
-on property:persist.usb.otg.poweron=1
-     write /proc/msm_otg/otg_poweron 1
-
- on property:persist.usb.otg.poweron=0
-     write /proc/msm_otg/otg_poweron 0
-
-on property:sys.boot_completed=1
-     write /proc/msm_otg/otg_boot_check 1
-
-on diag
-     stop adbd
-     mkdir /dev/usb-ffs 0770 shell shell
-     mkdir /dev/usb-ffs/adb 0770 shell shell
-     mount functionfs adb /dev/usb-ffs/adb uid=2000,gid=2000
-     write /sys/class/android_usb/android0/f_ffs/aliases adb
-     write /sys/class/android_usb/android0/diag 1
-     write /sys/class/android_usb/android0/enable 0
-     write /sys/class/android_usb/android0/f_diag/clients diag
-     write /sys/class/android_usb/android0/f_serial/transports smd,tty
-     write /sys/class/android_usb/android0/functions diag,adb,serial
-     write /sys/class/android_usb/android0/iSerial  C4ATAS000000
-     write /sys/class/android_usb/android0/enable 1
-     setprop sys.usb.diag 1
-     start adbd
-     start qcomsysd
-     start yepdiag
-
-on usb-config-none
-     write /sys/class/android_usb/android0/enable 0
-     write  /sys/class/android_usb/android0/functions mtp
-     write /sys/class/android_usb/android0/diag 1
-     write /sys/class/android_usb/android0/enable 1
-
-on property:sys.usb.charger.factory=0
-     stop adbd
-     write /sys/class/android_usb/android0/diag 0
-     write /sys/class/android_usb/android0/enable 0
-     write /sys/class/android_usb/android0/bDeviceClass 0
-     setprop sys.usb.config none
