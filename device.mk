@@ -44,4 +44,3 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PACKAGES += \
     WCNSS_qcom_wlan_nv.bin
 
-
