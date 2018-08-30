@@ -41,6 +41,5 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.fusion.magfield.max=250
 
-PRODUCT_PACKAGES += \
-    WCNSS_qcom_wlan_nv.bin
-
+PRODUCT_COPY_FILES += \
+    device/asus/Z010D/wifi/WCNSS_qcom_wlan_nv.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
